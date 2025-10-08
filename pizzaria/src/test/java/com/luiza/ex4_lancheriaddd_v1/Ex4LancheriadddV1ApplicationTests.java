@@ -1,4 +1,4 @@
-package com.bcopstein.ex4_lancheriaddd_v1;
+package com.luiza.ex4_lancheriaddd_v1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

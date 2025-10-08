@@ -19,7 +19,7 @@ logging:
       springframework:
         jdbc: DEBUG
     com:
-      bcopstein: DEBUG
+      luiza: DEBUG
 application:
   name: ex4-lancheriaddd-v1
 server:
