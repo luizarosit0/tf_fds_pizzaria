@@ -1,0 +1,1 @@
+//Responsável por verificar a consistência do pedido, calcular valores, recuperar histórico de pedidos etc
