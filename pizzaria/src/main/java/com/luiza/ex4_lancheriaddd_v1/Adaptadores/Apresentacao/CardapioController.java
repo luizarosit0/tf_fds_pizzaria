@@ -36,6 +36,7 @@ public class CardapioController {
         Set<Long> conjIdSugestoes = new HashSet<>(cardapioResponse.getSugestoesDoChef().stream()
             .map(produto->produto.getId())
             .toList());
+        // transforma o response em presenter
         CardapioPresenter cardapioPresenter = new CardapioPresenter(cardapioResponse.getCardapio().getTitulo());
         for(Produto produto:cardapioResponse.getCardapio().getProdutos()){
             boolean sugestao = conjIdSugestoes.contains(produto.getId());

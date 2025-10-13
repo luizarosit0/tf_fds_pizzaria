@@ -13,7 +13,7 @@ public class CozinhaService {
     private Pedido emPreparacao;
     private Queue<Pedido> filaSaida;
 
-    private ScheduledExecutorService scheduler;
+    private ScheduledExecutorService scheduler; // para simular o tempo de preparo 
 
     public CozinhaService() {
         filaEntrada = new LinkedBlockingQueue<Pedido>();
@@ -23,26 +23,26 @@ public class CozinhaService {
     }
 
     private synchronized void colocaEmPreparacao(Pedido pedido){
-        pedido.setStatus(Pedido.Status.PREPARACAO);
+        pedido.setStatus(Pedido.Status.PREPARACAO); // atualiza status 
         emPreparacao = pedido;
         System.out.println("Pedido em preparacao: "+pedido);
         // Agenda pedidoPronto para ser chamado em 2 segundos
-        scheduler.schedule(() -> pedidoPronto(), 5, TimeUnit.SECONDS);
+        scheduler.schedule(() -> pedidoPronto(), 5, TimeUnit.SECONDS); // o pedido fica pronto em 5s
     }
 
     public synchronized void chegadaDePedido(Pedido p) {
-        filaEntrada.add(p);
+        filaEntrada.add(p); // pedido na fila de preparo
         System.out.println("Pedido na fila de entrada: "+p);
         if (emPreparacao == null) {
-            colocaEmPreparacao(filaEntrada.poll());
+            colocaEmPreparacao(filaEntrada.poll()); // manda preparar 
         }
     }
 
     public synchronized void pedidoPronto() {
-        emPreparacao.setStatus(Pedido.Status.PRONTO);
+        emPreparacao.setStatus(Pedido.Status.PRONTO); // atualiza status
         filaSaida.add(emPreparacao);
         System.out.println("Pedido na fila de saida: "+emPreparacao);
-        emPreparacao = null;
+        emPreparacao = null; //acabou a preparacao
         // Se tem pedidos na fila, programa a preparação para daqui a 1 segundo
         if (!filaEntrada.isEmpty()){
             Pedido prox = filaEntrada.poll();
