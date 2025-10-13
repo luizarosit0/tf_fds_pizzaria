@@ -66,15 +66,31 @@ public class Pedido {
         return valor;
     }
 
+    public void setValor(double valor){
+        this.valor = valor;
+    }
+
     public double getImpostos() {
         return impostos;
+    }
+
+    public void setImpostos(double impostos){
+        this.impostos = impostos;
     }
 
     public double getDesconto() {
         return desconto;
     }
 
+    public void setDesconto(double desconto){
+        this.desconto = desconto;
+    }
+
     public double getValorCobrado() {
         return valorCobrado;
+    }
+
+    public void setValorCobrado(double valorCobrado){
+        this.valorCobrado = valorCobrado;
     }
 }
