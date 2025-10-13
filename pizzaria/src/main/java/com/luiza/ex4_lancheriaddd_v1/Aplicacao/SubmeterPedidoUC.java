@@ -1,62 +1,63 @@
 package com.luiza.ex4_lancheriaddd_v1.Aplicacao;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.SubmeterPedidoResponse;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.CardapioService;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.ClienteRepository;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.ProdutosRepository;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemPedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 
 @Component
 public class SubmeterPedidoUC {
-    private CardapioService cardapioService;
+
+    // 1. Definimos um record simples SÓ para carregar os dados dos itens.
+    // Ele existe apenas dentro deste caso de uso.
+    public record ItemData(long produtoId, int quantidade) {}
+
+    private PedidoService pedidoService;
+    private ClienteRepository clienteRepository;
+    private ProdutosRepository produtosRepository; 
 
     @Autowired
-    public SubmeterPedidoUC(CardapioService cardapioService){
-        this.cardapioService = cardapioService;
+    public SubmeterPedidoUC(PedidoService pedidoService, ClienteRepository clienteRepository, ProdutosRepository produtosRepository) {
+        this.pedidoService = pedidoService;
+        this.clienteRepository = clienteRepository;
+        this.produtosRepository = produtosRepository;
     }
 
-    public SubmeterPedidoResponse run(){
+    // 2. O método run agora recebe os parâmetros diretamente.
+    public SubmeterPedidoResponse run(String clienteCpf, List<ItemData> itensData) {
+        Cliente cliente = clienteRepository.buscarPorCpf(clienteCpf);
 
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente com CPF " + clienteCpf + " não encontrado.");
+        }
+
+        List<ItemPedido> itens = itensData.stream()
+            .map(itemData -> {
+                Produto produto = produtosRepository.recuperaProdutoPorid(itemData.produtoId());
+                if (produto == null) {
+                    throw new IllegalArgumentException("Produto com ID " + itemData.produtoId() + " não encontrado.");
+                }
+                return new ItemPedido(produto, itemData.quantidade());
+            })
+            .collect(Collectors.toList());
+
+        // Criar o objeto de domínio Pedido no seu estado inicial
+        Pedido novoPedido = new Pedido(cliente, itens);
+
+        // Chamar o serviço de domínio para aplicar as regras de negócio
+        Pedido pedidoProcessado = pedidoService.submeter(novoPedido);
+
+        // Empacotar o resultado no response e retornar
+        return new SubmeterPedidoResponse(pedidoProcessado);
     }
-
-    // private final PedidoRepository pedidoRepo;
-    // private final EstoqueService estoqueService;
-    // private final DescontoService descontoService;
-    // private final ImpostoService impostoService;
-
-    // @Autowired
-    // public SubmeterPedidoUC(PedidoRepository pedidoRepo,
-    //                         EstoqueService estoqueService,
-    //                         DescontoService descontoService,
-    //                         ImpostoService impostoService) {
-    //     this.pedidoRepo = pedidoRepo;
-    //     this.estoqueService = estoqueService;
-    //     this.descontoService = descontoService;
-    //     this.impostoService = impostoService;
-    // }
-
-    // public SubmeterPedidoResponse run(Pedido pedido, int pedidosRecentes) {
-    //     // O objeto Pedido já vem pré-montado da requisição
-    //     pedido.setStatus(Pedido.Status.NOVO);
-
-    //     if (!estoqueService.verificarDisponibilidade()) {
-    //         pedido.setStatus(Pedido.Status.REPROVADO);
-    //         return new SubmeterPedidoResponse(pedido, false, "Ingredientes insuficientes.");
-    //     }
-
-    //     double subtotal = pedido.getItens().stream()
-    //             .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
-    //             .sum();
-
-    //     double desconto = descontoService.calcular(subtotal, pedidosRecentes);
-    //     double imposto = impostoService.calcular(subtotal);
-    //     double total = subtotal - desconto + imposto;
-
-    //     pedido.setStatus(Pedido.Status.APROVADO);
-    //     pedido.setValores(subtotal, imposto, desconto, total);
-        
-    //     Pedido pedidoSalvo = pedidoRepo.salvar(pedido);
-
-    //     return new SubmeterPedidoResponse(pedidoSalvo, true, "Pedido aprovado com sucesso!");
-    // }
 }

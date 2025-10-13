@@ -38,6 +38,19 @@ public class Pedido {
         this.valorCobrado = valorCobrado;
     }
 
+    //construtor simplificado
+    public Pedido(Cliente cliente, List<ItemPedido> itens) {
+        this.id = 0; // ID será gerado pelo banco
+        this.cliente = cliente;
+        this.dataHoraPagamento = null;
+        this.itens = itens;
+        this.status = Status.NOVO; // Um pedido sempre começa como NOVO
+        this.valor = 0;
+        this.impostos = 0;
+        this.desconto = 0;
+        this.valorCobrado = 0;
+    }
+
     public long getId() {
         return id;
     }
