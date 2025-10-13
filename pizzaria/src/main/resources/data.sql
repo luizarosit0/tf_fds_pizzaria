@@ -66,3 +66,16 @@ INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (1,3);
 
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,1);
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,3);
+
+-- Inserção de um pedido de exemplo (Aprovado, mas não pago)
+-- Cliente: Huguinho Pato (cpf: '9001')
+-- Itens: 1x Pizza Calabresa (R$ 55,00) + 2x Pizza Margherita (R$ 40,00 cada = R$ 80,00)
+-- Valor total dos itens: R$ 135,00
+-- Impostos (10%): R$ 13,50
+-- Desconto: R$ 0,00
+-- Valor cobrado: R$ 148,50
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) VALUES (1, '9001', 'APROVADO', NULL, 135.00, 13.50, 0.00, 148.50);
+
+-- Inserção dos itens para o pedido de ID 1
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 1, 1); -- 1x Pizza calabresa
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 3, 2); -- 2x Pizza margherita
