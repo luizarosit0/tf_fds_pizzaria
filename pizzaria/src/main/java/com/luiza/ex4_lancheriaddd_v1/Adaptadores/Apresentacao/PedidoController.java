@@ -129,13 +129,13 @@ public class PedidoController {
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace(); // Boa prática para debugar erros internos
+            e.printStackTrace(); 
             return ResponseEntity.internalServerError().body("Erro ao processar o pagamento.");
         }
     }
 
     //UC6
-    // Ex: /pedidos/entregues?dataInicial=2023-01-01T00:00:00&dataFinal=2023-12-31T23:59:59
+    // Exemplo: /pedidos/entregues?dataInicial=2023-01-01T00:00:00&dataFinal=2023-12-31T23:59:59
     @GetMapping("/entregues")
     @CrossOrigin("*")
     public ResponseEntity<?> listarEntregues(
@@ -143,9 +143,9 @@ public class PedidoController {
             @RequestParam("dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal) {
         
         try {
-            // Chamada ao Caso de Uso
+            // chamada ao Caso de Uso
             ListarPedidosEntreguesResponse response = listarPedidosEntreguesUC.run(dataInicial, dataFinal);            
-            // Transformação para Presenter
+            // transformação para Presenter
             ListaPedidosPresenter presenter = ListaPedidosPresenter.fromEntityList(response.pedidos());
             return ResponseEntity.ok(presenter);
 

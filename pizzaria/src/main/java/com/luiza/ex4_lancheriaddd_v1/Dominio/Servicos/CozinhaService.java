@@ -39,7 +39,7 @@ public class CozinhaService {
 
         emPreparacao = pedido; 
         System.out.println("Pedido em preparacao: "+pedido);
-        // Agenda pedidoPronto para ser chamado em 2 segundos
+        // o pedidoPronto vai ser chamado em 2s
         scheduler.schedule(() -> pedidoPronto(), 5, TimeUnit.SECONDS); // o pedido fica pronto em 5s
     }
 
@@ -63,7 +63,8 @@ public class CozinhaService {
         entregaService.chegadaDePedido(emPreparacao);
         
         emPreparacao = null; //acabou a preparacao
-        // Se tem pedidos na fila, programa a preparação para daqui a 1 segundo
+        
+        // se tem pedidos na fila, programa a preparação para daqui a 1 segundo
         if (!filaEntrada.isEmpty()){
             Pedido prox = filaEntrada.poll();
             scheduler.schedule(() -> colocaEmPreparacao(prox), 1, TimeUnit.SECONDS);

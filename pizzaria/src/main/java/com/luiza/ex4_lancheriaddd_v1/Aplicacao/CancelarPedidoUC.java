@@ -28,7 +28,7 @@ public class CancelarPedidoUC {
             throw new IllegalStateException("Somente pedidos aprovados e não pagos podem ser cancelados.");
         }
 
-        // Atualiza o status
+        // atualiza o status
         pedido.setStatus(Pedido.Status.CANCELADO);
         pedidoService.atualizarStatus(pedido);
 
