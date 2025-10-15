@@ -1,7 +1,5 @@
 package com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos;
 
-//Responsável pelos meios de pagamento
-
 import org.springframework.stereotype.Service;
 
 //O serviço de pagamentos pode ser um “fake” que responde sempre que o 

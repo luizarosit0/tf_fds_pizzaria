@@ -42,7 +42,6 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             PreparedStatement ps = connection.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pedido.getCliente().getCpf());
             ps.setString(2, pedido.getStatus().name());
-            // dataHoraPagamento pode ser nulo inicialmente
             ps.setObject(3, pedido.getDataHoraPagamento()); 
             ps.setDouble(4, pedido.getValor());
             ps.setDouble(5, pedido.getImpostos());
@@ -51,10 +50,9 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             return ps;
         }, keyHolder);
 
-        // Após a execução, pegamos o ID gerado do KeyHolder
+        // pegamar o ID gerado do KeyHolder
         long pedidoId = keyHolder.getKey().longValue();
 
-        // Agora, inserimos cada item do pedido na tabela 'itens_pedido'
         String sqlItemPedido = "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (?, ?, ?)";
         
         for (ItemPedido item : pedido.getItens()) {
@@ -84,7 +82,7 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
                     rs.getLong("id"),
                     cliente,
                     rs.getTimestamp("data_hora_pagamento") != null ? rs.getTimestamp("data_hora_pagamento").toLocalDateTime() : null,
-                    null, // Itens serão buscados separadamente
+                    null,
                     Pedido.Status.valueOf(rs.getString("status")),
                     rs.getDouble("valor"),
                     rs.getDouble("impostos"),
@@ -103,7 +101,7 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
                 Produto produto = new Produto(
                     rs.getLong("prod_id"),
                     rs.getString("descricao"),
-                    new Receita(0, "", null), // Receita "fake" para satisfazer o construtor
+                    new Receita(0, "", null), // uma receita "fake" para satisfazer o construtor
                     rs.getInt("preco")
                 );
                 return new ItemPedido(produto, rs.getInt("quantidade"));

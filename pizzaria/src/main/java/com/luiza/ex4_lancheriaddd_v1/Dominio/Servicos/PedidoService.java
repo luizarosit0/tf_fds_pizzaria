@@ -44,7 +44,6 @@ public class PedidoService{
     }
 
     public void atualizarStatus(Pedido pedido) {
-        // Se no futuro precisar de auditoria ou notificação ao atualizar, o Service faz isso aqui.
         pedidoRepository.atualizar(pedido);
     }
 
@@ -53,7 +52,6 @@ public class PedidoService{
     }
 
     public List<Pedido> buscarEntreguesPorPeriodo(Status status, LocalDateTime dataInicial, LocalDateTime dataFinal) {
-        // O Service pode implementar regras de negócio para relatórios antes de chamar o Repository.
         return pedidoRepository.buscarPorStatusEPeriodo(status, dataInicial, dataFinal);
     }
 
@@ -95,23 +93,22 @@ public class PedidoService{
             throw new IllegalStateException("O pedido não foi aprovado para pagamento.");
         }
         
-        // Processa o pagamento
+        // processa o pagamento
         boolean pagamentoOk = pagamentoService.processaPagamento(pedido.getValorCobrado());
         
         if (pagamentoOk) {
-            // Atualiza o status e a data do pedido
+            // atualiza o status e a data
             pedido.setStatus(Status.PAGO);
             pedido.setDataHoraPagamento(LocalDateTime.now());
             
-            // Salva a atualização no banco de dados
             pedidoRepository.atualizar(pedido);
             
-            // Envia o pedido para a fila da cozinha
+            // pedido vai para a fila da cozinha
             cozinhaService.chegadaDePedido(pedido);
             
             return pedido;
         } else {
-            // Se o pagamento falhar, podemos lançar uma exceção ou retornar nulo
+            // se o pagamento falhar
             throw new RuntimeException("Falha ao processar o pagamento.");
         }
     }

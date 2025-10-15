@@ -20,7 +20,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido.Status;
 @Service
 public class EntregaService implements EntregaServiceI {
     private Queue<Pedido> filaEntrada;
-    private Pedido emTransporte; // Simula o entregador
+    private Pedido emTransporte; // simula o entregador
     
     private ScheduledExecutorService scheduler;
     private PedidoRepository pedidoRepository;
@@ -39,7 +39,7 @@ public class EntregaService implements EntregaServiceI {
         emTransporte = pedido;
         System.out.println("Pedido em transporte: " + pedido.getId());
 
-        // Simula o tempo de entrega em 15s -> para testar os status 
+        // simula o tempo de entrega em 15s -> para testar os status 
         scheduler.schedule(() -> pedidoEntregue(), 15, TimeUnit.SECONDS); 
     }
 
