@@ -17,7 +17,5 @@ public class ClienteService {
 
     public Cliente buscarPorCpf(String cpf){
         return clienteRepository.buscarPorCpf(cpf);
-    }
-
-    
+    }  
 }

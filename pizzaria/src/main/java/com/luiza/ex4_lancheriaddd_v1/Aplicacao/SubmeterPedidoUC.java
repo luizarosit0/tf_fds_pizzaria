@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.SubmeterPedidoResponse;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.ClienteRepository;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.ProdutosRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemPedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.ClienteService;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.ProdutoService;
 
 @Component
 public class SubmeterPedidoUC {
@@ -21,18 +21,18 @@ public class SubmeterPedidoUC {
     public record ItemData(long produtoId, int quantidade) {}
 
     private PedidoService pedidoService;
-    private ClienteRepository clienteRepository;
-    private ProdutosRepository produtosRepository; 
+    private ClienteService clienteService;
+    private ProdutoService produtoService; 
 
     @Autowired
-    public SubmeterPedidoUC(PedidoService pedidoService, ClienteRepository clienteRepository, ProdutosRepository produtosRepository) {
+    public SubmeterPedidoUC(PedidoService pedidoService, ClienteService clienteService, ProdutoService produtoService) {
         this.pedidoService = pedidoService;
-        this.clienteRepository = clienteRepository;
-        this.produtosRepository = produtosRepository;
+        this.clienteService = clienteService;
+        this.produtoService = produtoService;
     }
 
     public SubmeterPedidoResponse run(String clienteCpf, List<ItemData> itensData) {
-        Cliente cliente = clienteRepository.buscarPorCpf(clienteCpf);
+        Cliente cliente = clienteService.buscarPorCpf(clienteCpf);
 
         if (cliente == null) {
             throw new IllegalArgumentException("Cliente com CPF " + clienteCpf + " não encontrado.");
@@ -40,7 +40,7 @@ public class SubmeterPedidoUC {
 
         List<ItemPedido> itens = itensData.stream()
             .map(itemData -> {
-                Produto produto = produtosRepository.recuperaProdutoPorid(itemData.produtoId());
+                Produto produto = produtoService.recuperaProdutoPorid(itemData.produtoId());
                 if (produto == null) {
                     throw new IllegalArgumentException("Produto com ID " + itemData.produtoId() + " não encontrado.");
                 }
