@@ -83,7 +83,7 @@ INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 3, 2); -
 -- Cliente: Luizinho Pato (cpf: '9002')
 -- Itens: 1x Pizza queijo e presunto (R$ 60,00)
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
-    VALUES (2, '9002', 'CANCELADO', NULL, 60.00, 6.00, 0.00, 66.00);
+    VALUES (2, '9002', 'CANCELADO', '2025-10-10 14:30:00', 60.00, 6.00, 0.00, 66.00);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (2, 2, 1);
 
 -- PEDIDO 3: Pedido Entregue (Testar UC6 - Listar Entregues)
@@ -99,5 +99,14 @@ INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (3, 3, 1);
 -- Itens: 2x Pizza calabresa (R$ 55,00 cada = R$ 110,00)
 -- Status inicial é APROVADO, pronto para ser pago.
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
-    VALUES (4, '9002', 'APROVADO', NULL, 110.00, 11.00, 0.00, 121.00);
+    VALUES (4, '9002', 'APROVADO', '2025-10-12 14:30:00', 110.00, 11.00, 0.00, 121.00);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (4, 1, 2);
+
+-- PEDIDO 5: Pedido Entregue (Testar UC6 - Listar Entregues)
+-- Cliente: Luizinho Pato (cpf: '9002')
+-- Itens: 3x Pizza margherita (R$ 40,00 cada = R$ 120,00)
+-- A data de pagamento/entrega deve ser do passado para ter resultados no relatório.
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (5, '9002', 'ENTREGUE', '2025-10-14 21:30:00', 120.00, 12.00, 0.00, 132.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (3, 3, 1);
+
