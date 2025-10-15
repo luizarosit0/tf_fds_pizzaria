@@ -19,15 +19,15 @@ public class CardapioService {
         this.cardapioRepository = cardapioRepository;
     }
 
-    public Cardapio recuperaCardapio(long Id){
+    public Cardapio recuperaCardapio(long Id){ // cardapio completo
         return cardapioRepository.recuperaPorId(Id);
     }
 
-    public List<CabecalhoCardapio> recuperaListaDeCardapios(){
+    public List<CabecalhoCardapio> recuperaListaDeCardapios(){ // so o cabecalho do cardapio 
         return cardapioRepository.cardapiosDisponiveis();
     }
 
-    public List<Produto> recuperaSugestoesDoChef(){
+    public List<Produto> recuperaSugestoesDoChef(){ // produtos destacados como sugestoes 
         return cardapioRepository.indicacoesDoChef();
     }
 }

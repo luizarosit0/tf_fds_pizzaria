@@ -3,35 +3,37 @@ package com.luiza.ex4_lancheriaddd_v1.Aplicacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.CancelarResponse;
+import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.CancelarPedidoResponse;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
-@Component
+@Component 
 public class CancelarPedidoUC {
-
-    private final PedidoRepository pedidoRepo;
+    private final PedidoRepository pedidoRepository;
 
     @Autowired
-    public CancelarPedidoUC(PedidoRepository pedidoRepo) {
-        this.pedidoRepo = pedidoRepo;
+    public CancelarPedidoUC(PedidoRepository pedidoRepository) {
+        this.pedidoRepository = pedidoRepository;
     }
 
-    public CancelarResponse run(long pedidoId) { // colocar isso no CancelarResponse
-        Pedido pedido = pedidoRepo.buscarPorId(pedidoId);
-
+    public CancelarPedidoResponse run(long idPedido) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
         if (pedido == null) {
-            return false;
+            throw new IllegalArgumentException("Pedido não encontrado.");
         }
 
-        //deve estar no status APROVADO para poder ser cancelado 
         if (pedido.getStatus() != Pedido.Status.APROVADO) {
-            return false;
+            throw new IllegalStateException("Somente pedidos aprovados e não pagos podem ser cancelados.");
         }
 
+        // Atualiza o status
         pedido.setStatus(Pedido.Status.CANCELADO);
-        pedidoRepo.salvar(pedido); 
+        pedidoRepository.atualizar(pedido);
 
-        return true;
+        return new CancelarPedidoResponse(
+            pedido.getId(),
+            pedido.getStatus(),
+            "Pedido cancelado com sucesso."
+        );
     }
 }
