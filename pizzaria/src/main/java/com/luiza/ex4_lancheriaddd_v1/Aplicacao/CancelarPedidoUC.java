@@ -1,13 +1,13 @@
 package com.luiza.ex4_lancheriaddd_v1.Aplicacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.CancelarPedidoResponse;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
-import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.CancelarPedidoResponse;
 
-@Service
+@Component 
 public class CancelarPedidoUC {
     private final PedidoRepository pedidoRepository;
 
@@ -28,7 +28,7 @@ public class CancelarPedidoUC {
 
         // Atualiza o status
         pedido.setStatus(Pedido.Status.CANCELADO);
-        pedidoRepository.salvar(pedido);
+        pedidoRepository.atualizar(pedido);
 
         return new CancelarPedidoResponse(
             pedido.getId(),

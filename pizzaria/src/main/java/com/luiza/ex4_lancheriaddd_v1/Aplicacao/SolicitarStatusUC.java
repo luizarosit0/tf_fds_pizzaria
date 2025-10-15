@@ -1,11 +1,13 @@
 package com.luiza.ex4_lancheriaddd_v1.Aplicacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.StatusPedidoResponse;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
-import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.StatusPedidoResponse;
 
+@Component
 public class SolicitarStatusUC {
     private  PedidoRepository pedidoRepository;
 
@@ -16,7 +18,9 @@ public class SolicitarStatusUC {
 
     public StatusPedidoResponse run(long idPedido) {
         Pedido pedido = pedidoRepository.buscarPorId(idPedido);
-        if (pedido == null) return null;
+        if (pedido == null) {
+            throw new IllegalArgumentException("Pedido com ID " + idPedido + " não encontrado.");
+        }
         return new StatusPedidoResponse(
             pedido.getId(),
             pedido.getStatus(),

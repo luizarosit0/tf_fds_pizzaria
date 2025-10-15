@@ -66,17 +66,22 @@ public class PedidoController {
 
     @GetMapping("/{id}/status")
     @CrossOrigin("*")
-    public StatusPedidoPresenter recuperaStatus(@PathVariable long id) {
-        StatusPedidoResponse response = solicitarStatusUC.run(id);
-        if (response == null) return null; // pode trocar por 404 depois
-        return new StatusPedidoPresenter(
-            response.id(),
-            response.status(),
-            response.valorTotal(),
-            response.desconto(),
-            response.dataHoraPagamento()
-        );
-    } 
+    public ResponseEntity<?> recuperaStatus(@PathVariable long id) {
+        try {
+            StatusPedidoResponse response = solicitarStatusUC.run(id);
+            StatusPedidoPresenter presenter = new StatusPedidoPresenter(
+                response.id(),
+                response.status(),
+                response.valorTotal(),
+                response.desconto(),
+                response.dataHoraPagamento()
+            );
+            return ResponseEntity.ok(presenter);
+        } catch (IllegalArgumentException e) {
+            // Retorna um 404 Not Found com a mensagem de erro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
     @PutMapping("/{id}/cancelar")
     @CrossOrigin("*")

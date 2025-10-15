@@ -6,8 +6,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.stereotype.Service;
+
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
+@Service
 public class CozinhaService {
     private Queue<Pedido> filaEntrada;
     private Pedido emPreparacao;

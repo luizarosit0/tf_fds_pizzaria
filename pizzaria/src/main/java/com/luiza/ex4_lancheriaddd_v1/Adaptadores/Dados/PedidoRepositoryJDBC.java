@@ -124,6 +124,23 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
     }
 
     @Override
+    public void atualizar(Pedido pedido) {
+        String sql = "UPDATE pedidos SET status = ?, data_hora_pagamento = ?, " +
+                    "valor = ?, impostos = ?, desconto = ?, valor_cobrado = ? " +
+                    "WHERE id = ?";
+
+        jdbcTemplate.update(sql,
+            pedido.getStatus().name(),
+            pedido.getDataHoraPagamento(),
+            pedido.getValor(),
+            pedido.getImpostos(),
+            pedido.getDesconto(),
+            pedido.getValorCobrado(),
+            pedido.getId()
+        );
+    }
+
+    @Override
     public int quantPedidos(String CPF, int dias) {
         String sql = "SELECT COUNT(*) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
         LocalDate dataLimite = LocalDate.now().minusDays(dias);
