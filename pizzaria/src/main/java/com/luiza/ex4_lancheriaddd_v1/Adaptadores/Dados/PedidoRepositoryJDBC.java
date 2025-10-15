@@ -3,6 +3,7 @@ package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,7 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             }, id);
 
             // 3. Adicionar a lista de itens ao pedido e retorná-lo
-            pedido.getItens().addAll(itens); // Precisaremos de um setter ou de um construtor que aceite a lista
+            pedido.setItens(itens); // Precisaremos de um setter ou de um construtor que aceite a lista
             return pedido;
 
         } catch (EmptyResultDataAccessException e) {
@@ -138,6 +139,23 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             pedido.getValorCobrado(),
             pedido.getId()
         );
+    }
+
+    @Override
+    public List<Pedido> buscarPorStatusEPeriodo(Pedido.Status status, LocalDateTime dataInicial, LocalDateTime dataFinal) {
+        
+        String sql = "SELECT p.id FROM pedidos p WHERE p.status = ? AND p.data_hora_pagamento BETWEEN ? AND ?";
+
+        // pega os IDs que estão entre as duas datas
+        List<Long> ids = jdbcTemplate.queryForList(sql, Long.class, 
+                                                   status.name(), 
+                                                   dataInicial, 
+                                                   dataFinal);
+
+        //pra cada um, chamar buscarPorId() 
+        return ids.stream()
+                  .map(this::buscarPorId)
+                  .toList();
     }
 
     @Override

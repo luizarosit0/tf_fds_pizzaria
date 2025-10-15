@@ -63,8 +63,16 @@ public class Pedido {
         return dataHoraPagamento;
     }
 
+    public void setDataHoraPagamento(LocalDateTime dataHoraPagamento) {
+        this.dataHoraPagamento = dataHoraPagamento;
+    }
+
     public List<ItemPedido> getItens() {
         return itens;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
     }
 
     public Status getStatus() {

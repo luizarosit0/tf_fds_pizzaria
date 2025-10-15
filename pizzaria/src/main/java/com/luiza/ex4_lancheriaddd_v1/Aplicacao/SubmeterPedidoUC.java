@@ -18,8 +18,6 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 @Component
 public class SubmeterPedidoUC {
 
-    // 1. Definimos um record simples SÓ para carregar os dados dos itens.
-    // Ele existe apenas dentro deste caso de uso.
     public record ItemData(long produtoId, int quantidade) {}
 
     private PedidoService pedidoService;
@@ -33,7 +31,6 @@ public class SubmeterPedidoUC {
         this.produtosRepository = produtosRepository;
     }
 
-    // 2. O método run agora recebe os parâmetros diretamente.
     public SubmeterPedidoResponse run(String clienteCpf, List<ItemData> itensData) {
         Cliente cliente = clienteRepository.buscarPorCpf(clienteCpf);
 
@@ -51,13 +48,12 @@ public class SubmeterPedidoUC {
             })
             .collect(Collectors.toList());
 
-        // Criar o objeto de domínio Pedido no seu estado inicial
+        // criar o objeto de domínio Pedido no seu estado inicial
         Pedido novoPedido = new Pedido(cliente, itens);
 
-        // Chamar o serviço de domínio para aplicar as regras de negócio
+        // chamar o serviço de domínio para aplicar as regras de negócio
         Pedido pedidoProcessado = pedidoService.submeter(novoPedido);
 
-        // Empacotar o resultado no response e retornar
         return new SubmeterPedidoResponse(pedidoProcessado);
     }
 }

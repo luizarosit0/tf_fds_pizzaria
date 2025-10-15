@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.CardapioRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.CabecalhoCardapio;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cardapio;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto; 
 
 @Service
 public class CardapioService {
