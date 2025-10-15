@@ -85,7 +85,7 @@ public class PedidoService{
 
     //UC5
     public Pedido pagar(long idPedido) {
-        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        Pedido pedido = this.buscarPorId(idPedido);
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido com ID " + idPedido + " não encontrado.");
         }
