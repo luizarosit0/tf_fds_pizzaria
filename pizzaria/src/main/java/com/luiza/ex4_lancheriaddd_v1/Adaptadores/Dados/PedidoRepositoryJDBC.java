@@ -31,15 +31,13 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
     
     @Override
     public Pedido salvar(Pedido pedido) {
-        // 1. Salvar na tabela 'pedidos'
+
         String sqlPedido = "INSERT INTO pedidos (cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) " +
                            "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        // O KeyHolder é um objeto especial do Spring que armazena as chaves (IDs)
-        // geradas pelo banco de dados após um INSERT.
+        // objeto do Spring que armazena as chaves geradas pelo banco de dados depois de um INSERT.
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        // Executamos o INSERT usando uma forma mais completa do jdbcTemplate.update
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pedido.getCliente().getCpf());
@@ -63,16 +61,13 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             jdbcTemplate.update(sqlItemPedido, pedidoId, item.getItem().getId(), item.getQuantidade());
         }
 
-        // Atualizamos o objeto original com o novo ID e o retornamos
-        // (Isso não é estritamente necessário, mas é uma boa prática)
-        // Pedido.java precisaria de um setId(long id).
         return pedido;
     }
 
     @Override
     public Pedido buscarPorId(long id) {
         try {
-            // 1. Buscar o pedido principal e os dados do cliente associado
+            //buscar o pedido e os dados do cliente
             String sqlPedido = "SELECT p.*, c.nome, c.celular, c.endereco, c.email " +
                                "FROM pedidos p JOIN clientes c ON p.cliente_cpf = c.cpf " +
                                "WHERE p.id = ?";
@@ -98,13 +93,13 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
                 );
             }, id);
 
-            // 2. Buscar os itens do pedido
+            // buscar os itens
             String sqlItens = "SELECT ip.quantidade, prod.id as prod_id, prod.descricao, prod.preco " +
                               "FROM itens_pedido ip JOIN produtos prod ON ip.produto_id = prod.id " +
                               "WHERE ip.pedido_id = ?";
                               
             List<ItemPedido> itens = jdbcTemplate.query(sqlItens, (rs, rowNum) -> {
-                // Criamos um objeto Produto simplificado, pois não precisamos da receita aqui.
+                // produto simplificado
                 Produto produto = new Produto(
                     rs.getLong("prod_id"),
                     rs.getString("descricao"),
@@ -114,12 +109,10 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
                 return new ItemPedido(produto, rs.getInt("quantidade"));
             }, id);
 
-            // 3. Adicionar a lista de itens ao pedido e retorná-lo
-            pedido.setItens(itens); // Precisaremos de um setter ou de um construtor que aceite a lista
+            pedido.setItens(itens);
             return pedido;
 
         } catch (EmptyResultDataAccessException e) {
-            // Se nenhum pedido for encontrado com o ID, retorna nulo.
             return null;
         }
     }

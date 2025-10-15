@@ -20,7 +20,6 @@ public class PedidoPresenter {
     private double impostos;
     private double valorCobrado;
 
-    // Construtor que faz a transformação da Entidade para o Presenter
     public PedidoPresenter(Pedido pedido) {
         this.id = pedido.getId();
         this.status = pedido.getStatus().name(); // Converte o enum para String
@@ -30,17 +29,15 @@ public class PedidoPresenter {
         this.impostos = pedido.getImpostos();
         this.valorCobrado = pedido.getValorCobrado();
         
-        // Transforma a lista de ItemPedido (entidade) para ItemPedidoPresenter (DTO)
         this.itens = pedido.getItens().stream()
             .map(item -> new ItemPedidoPresenter(
                 item.getItem().getDescricao(),
                 item.getQuantidade(),
-                item.getItem().getPreco() / 100.0 // Exemplo de formatação
+                item.getItem().getPreco() / 100.0 
             ))
             .collect(Collectors.toList());
     }
 
-    // Getters para que o Spring possa serializar para JSON
     public long getId() { 
         return id; 
     }
