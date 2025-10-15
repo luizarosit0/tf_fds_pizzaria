@@ -74,8 +74,30 @@ INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,3);
 -- Impostos (10%): R$ 13,50
 -- Desconto: R$ 0,00
 -- Valor cobrado: R$ 148,50
-INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) VALUES (1, '9001', 'APROVADO', NULL, 135.00, 13.50, 0.00, 148.50);
-
--- Inserção dos itens para o pedido de ID 1
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (1, '9001', 'APROVADO', NULL, 135.00, 13.50, 0.00, 148.50);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 1, 1); -- 1x Pizza calabresa
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 3, 2); -- 2x Pizza margherita
+
+-- PEDIDO 2: Pedido Cancelado (Testar UC4)
+-- Cliente: Luizinho Pato (cpf: '9002')
+-- Itens: 1x Pizza queijo e presunto (R$ 60,00)
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (2, '9002', 'CANCELADO', NULL, 60.00, 6.00, 0.00, 66.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (2, 2, 1);
+
+-- PEDIDO 3: Pedido Entregue (Testar UC6 - Listar Entregues)
+-- Cliente: Huguinho Pato (cpf: '9001')
+-- Itens: 1x Pizza margherita (R$ 40,00)
+-- A data de pagamento/entrega deve ser do passado para ter resultados no relatório.
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (3, '9001', 'ENTREGUE', '2025-10-10 14:30:00', 40.00, 4.00, 0.00, 44.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (3, 3, 1);
+
+-- PEDIDO 4: Pedido para Teste de Pagar (UC5)
+-- Cliente: Luizinho Pato (cpf: '9002')
+-- Itens: 2x Pizza calabresa (R$ 55,00 cada = R$ 110,00)
+-- Status inicial é APROVADO, pronto para ser pago.
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (4, '9002', 'APROVADO', NULL, 110.00, 11.00, 0.00, 121.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (4, 1, 2);

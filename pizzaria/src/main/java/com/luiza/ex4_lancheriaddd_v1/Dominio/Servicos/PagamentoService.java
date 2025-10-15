@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class PagamentoService implements PagamentoServiceI {
 
     @Override
-    public boolean pagar(double valor) {
+    public boolean processaPagamento(double valor) {
         System.out.println("Processando pagamento de R$" + valor + "... Pagamento Aprovado!");
         return true;
     }

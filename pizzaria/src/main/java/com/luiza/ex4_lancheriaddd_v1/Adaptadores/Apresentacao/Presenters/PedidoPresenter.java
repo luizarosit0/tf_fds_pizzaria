@@ -7,7 +7,6 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
 public class PedidoPresenter {
 
-    // Sub-classe interna para representar os itens de forma simples
     public record ItemPedidoPresenter(String descricaoProduto,
                                       int quantidade, 
                                       double precoUnitario) {}

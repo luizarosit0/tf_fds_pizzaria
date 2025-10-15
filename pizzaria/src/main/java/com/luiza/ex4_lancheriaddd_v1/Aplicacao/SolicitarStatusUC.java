@@ -4,20 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.StatusPedidoResponse;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 
 @Component
 public class SolicitarStatusUC {
-    private  PedidoRepository pedidoRepository;
+    private  PedidoService pedidoService;
 
     @Autowired
-    public SolicitarStatusUC(PedidoRepository pedidoRepository) {
-        this.pedidoRepository = pedidoRepository;
+    public SolicitarStatusUC(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
     }
 
     public StatusPedidoResponse run(long idPedido) {
-        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        Pedido pedido = pedidoService.buscarPorId(idPedido);
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido com ID " + idPedido + " não encontrado.");
         }

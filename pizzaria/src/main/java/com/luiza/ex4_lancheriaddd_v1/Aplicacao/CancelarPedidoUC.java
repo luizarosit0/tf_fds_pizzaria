@@ -3,21 +3,23 @@ package com.luiza.ex4_lancheriaddd_v1.Aplicacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.CancelarPedidoResponse;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
+import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.SubmeterPedidoResponse;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 
 @Component 
 public class CancelarPedidoUC {
-    private final PedidoRepository pedidoRepository;
+    private PedidoService pedidoService;
 
     @Autowired
-    public CancelarPedidoUC(PedidoRepository pedidoRepository) {
-        this.pedidoRepository = pedidoRepository;
+    public CancelarPedidoUC(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
     }
 
-    public CancelarPedidoResponse run(long idPedido) {
-        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+    // reutilizar o SubmeterPedidoResponse, pois soh queremos ver o pedido modificado
+    // criar outro response tornaria redudndante
+    public SubmeterPedidoResponse run(long idPedido) {
+        Pedido pedido = pedidoService.buscarPorId(idPedido);
         if (pedido == null) {
             throw new IllegalArgumentException("Pedido não encontrado.");
         }
@@ -28,12 +30,8 @@ public class CancelarPedidoUC {
 
         // Atualiza o status
         pedido.setStatus(Pedido.Status.CANCELADO);
-        pedidoRepository.atualizar(pedido);
+        pedidoService.atualizarStatus(pedido);
 
-        return new CancelarPedidoResponse(
-            pedido.getId(),
-            pedido.getStatus(),
-            "Pedido cancelado com sucesso."
-        );
+        return new SubmeterPedidoResponse(pedido);
     }
 }
