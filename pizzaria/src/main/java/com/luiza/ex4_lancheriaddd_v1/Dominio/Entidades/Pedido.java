@@ -109,6 +109,7 @@ public class Pedido {
 
     public double getValorCobrado() {
         return valorCobrado;
+
     }
 
     public void setValorCobrado(double valorCobrado){

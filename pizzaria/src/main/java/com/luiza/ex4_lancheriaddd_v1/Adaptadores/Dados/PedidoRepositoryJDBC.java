@@ -1,5 +1,6 @@
 package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -43,10 +44,11 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             ps.setString(1, pedido.getCliente().getCpf());
             ps.setString(2, pedido.getStatus().name());
             ps.setObject(3, pedido.getDataHoraPagamento()); 
-            ps.setDouble(4, pedido.getValor());
-            ps.setDouble(5, pedido.getImpostos());
-            ps.setDouble(6, pedido.getDesconto());
-            ps.setDouble(7, pedido.getValorCobrado());
+
+            ps.setBigDecimal(4, BigDecimal.valueOf(pedido.getValor()));
+            ps.setBigDecimal(5, BigDecimal.valueOf(pedido.getImpostos()));
+            ps.setBigDecimal(6, BigDecimal.valueOf(pedido.getDesconto()));
+            ps.setBigDecimal(7, BigDecimal.valueOf(pedido.getValorCobrado()));
             return ps;
         }, keyHolder);
 
@@ -157,5 +159,16 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         // O método queryForObject é o padrão do Spring JDBC para quando a query retorna um único valor.
         // Ele é perfeitamente alinhado com o estilo do professor, sendo apenas mais específico para este caso.
         return jdbcTemplate.queryForObject(sql, Integer.class, CPF, dataLimite);
+    }
+
+    @Override
+    public double totalGastoUltimosDias(String CPF, int dias) {
+        String sql = "SELECT COALESCE(SUM(valor), 0) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
+        LocalDate dataLimite = LocalDate.now().minusDays(dias);
+
+        // queryForObject retorna o total somado (ou 0 se não houver registros)
+        Double total = jdbcTemplate.queryForObject(sql, Double.class, CPF, dataLimite);
+
+        return total != null ? total : 0.0;
     }
 }
