@@ -14,20 +14,21 @@ import org.springframework.stereotype.Service;
 
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.UsuarioRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Usuario;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.UsuarioService;
 
 @Service
 public class AutenticacaoService implements UserDetailsService {
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
     
     @Autowired
-    public AutenticacaoService(UsuarioRepository usuarioRepository){
-        this.usuarioRepository = usuarioRepository; 
+    public AutenticacaoService(UsuarioService usuarioService){
+        this.usuarioService = usuarioService; 
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //"username" = email
-        Usuario usuario = usuarioRepository.buscarPorEmail(email);
+        Usuario usuario = usuarioService.buscarPorEmail(email);
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
         }
