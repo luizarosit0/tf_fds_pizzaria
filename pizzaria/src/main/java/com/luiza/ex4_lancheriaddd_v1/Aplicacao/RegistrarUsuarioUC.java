@@ -12,12 +12,13 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.UsuarioServiceI;
 public class RegistrarUsuarioUC {
 
     private UsuarioServiceI usuarioService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
     
     @Autowired
-    public RegistrarUsuarioUC (UsuarioServiceI usuarioService, PasswordEncoder passwordEncoder){
+    public RegistrarUsuarioUC (UsuarioServiceI usuarioService){
         this.usuarioService = usuarioService;
-        this.passwordEncoder = passwordEncoder;
     }    
 
     public RegistrarUsuarioResponse run(String email, String senha) {
