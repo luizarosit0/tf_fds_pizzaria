@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Seguranca.AutenticacaoService;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.UsuarioRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Usuario;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.AutenticacaoService;
 
 @RestController
 @RequestMapping("/auth")
