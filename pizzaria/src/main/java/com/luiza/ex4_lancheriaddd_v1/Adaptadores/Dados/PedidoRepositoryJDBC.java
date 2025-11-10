@@ -3,6 +3,7 @@ package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +44,13 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             PreparedStatement ps = connection.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pedido.getCliente().getCpf());
             ps.setString(2, pedido.getStatus().name());
-            ps.setObject(3, pedido.getDataHoraPagamento()); 
+            //ps.setObject(3, pedido.getDataHoraPagamento()); 
+
+            if (pedido.getDataHoraPagamento() != null) {
+                ps.setObject(3, pedido.getDataHoraPagamento());
+            } else {
+                ps.setNull(3, Types.TIMESTAMP); // Define um NULL do tipo TIMESTAMP
+            }
 
             ps.setBigDecimal(4, BigDecimal.valueOf(pedido.getValor()));
             ps.setBigDecimal(5, BigDecimal.valueOf(pedido.getImpostos()));
@@ -53,7 +60,12 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         }, keyHolder);
 
         // pegamar o ID gerado do KeyHolder
-        long pedidoId = keyHolder.getKey().longValue();
+        Number generatedId = keyHolder.getKey();
+        if (generatedId == null) {
+            // Se o ID for nulo, lançamos um erro claro em vez de uma NullPointerException
+            throw new IllegalStateException("Falha ao salvar o pedido: O banco de dados não retornou o ID gerado.");
+        }
+        long pedidoId = generatedId.longValue();
 
         String sqlItemPedido = "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (?, ?, ?)";
         
@@ -126,10 +138,10 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         jdbcTemplate.update(sql,
             pedido.getStatus().name(),
             pedido.getDataHoraPagamento(),
-            pedido.getValor(),
-            pedido.getImpostos(),
-            pedido.getDesconto(),
-            pedido.getValorCobrado(),
+            BigDecimal.valueOf(pedido.getValor()),
+            BigDecimal.valueOf(pedido.getImpostos()), 
+            BigDecimal.valueOf(pedido.getDesconto()), 
+            BigDecimal.valueOf(pedido.getValorCobrado()),
             pedido.getId()
         );
     }
@@ -156,8 +168,6 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         String sql = "SELECT COUNT(*) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
         LocalDate dataLimite = LocalDate.now().minusDays(dias);
         
-        // O método queryForObject é o padrão do Spring JDBC para quando a query retorna um único valor.
-        // Ele é perfeitamente alinhado com o estilo do professor, sendo apenas mais específico para este caso.
         return jdbcTemplate.queryForObject(sql, Integer.class, CPF, dataLimite);
     }
 
@@ -166,7 +176,7 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         String sql = "SELECT COALESCE(SUM(valor), 0) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
         LocalDate dataLimite = LocalDate.now().minusDays(dias);
 
-        // queryForObject retorna o total somado (ou 0 se não houver registros)
+        // retorna o total somado ou 0
         Double total = jdbcTemplate.queryForObject(sql, Double.class, CPF, dataLimite);
 
         return total != null ? total : 0.0;

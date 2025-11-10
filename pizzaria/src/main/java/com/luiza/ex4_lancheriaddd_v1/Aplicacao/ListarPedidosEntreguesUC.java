@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.ListarPedidosEntreguesResponse; // NOVO IMPORT
+import com.luiza.ex4_lancheriaddd_v1.Aplicacao.Responses.ListarPedidosEntreguesResponse; 
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 
