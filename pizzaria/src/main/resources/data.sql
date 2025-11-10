@@ -110,3 +110,8 @@ INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impost
     VALUES (5, '9002', 'ENTREGUE', '2025-10-14 21:30:00', 120.00, 12.00, 0.00, 132.00);
 -- CORRIGIDO: O item de pedido deve ter pedido_id=5 e a quantidade deve ser 3.
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (5, 3, 3);
+
+-- Usuario Master 
+-- senha codificada = admin123 -> ver pq é BCrypt e não Base64
+INSERT INTO usuarios (email, senha, tipo) 
+VALUES ('master@pizzaria.com', '$2a$10$fP2.iZcVL6L3mQ1fRjD3A.CHj.x23iQkKCejUh5lOFdhrE1sCvNia', 'MASTER');

@@ -163,8 +163,6 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         String sql = "SELECT COUNT(*) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
         LocalDate dataLimite = LocalDate.now().minusDays(dias);
         
-        // O método queryForObject é o padrão do Spring JDBC para quando a query retorna um único valor.
-        // Ele é perfeitamente alinhado com o estilo do professor, sendo apenas mais específico para este caso.
         return jdbcTemplate.queryForObject(sql, Integer.class, CPF, dataLimite);
     }
 
