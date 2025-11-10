@@ -86,3 +86,10 @@ create table if not exists itens_pedido (
     foreign key (pedido_id) references pedidos(id),
     foreign key (produto_id) references produtos(id)
 );
+
+-- Tabela de Usuários (para autenticação)
+create table if not exists usuarios (
+    email varchar(100) primary key,
+    senha varchar(100) not null,
+    tipo varchar(20) not null  -- (master ou cliente)
+);

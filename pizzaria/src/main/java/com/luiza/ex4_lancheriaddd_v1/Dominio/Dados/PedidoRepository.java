@@ -12,4 +12,5 @@ public interface PedidoRepository {
     void atualizar(Pedido pedido);
     int quantPedidos(String CPF, int dias);
     List<Pedido> buscarPorStatusEPeriodo(Status status, LocalDateTime dataInicial, LocalDateTime dataFinal);
+    double totalGastoUltimosDias(String CPF, int dias);
 }

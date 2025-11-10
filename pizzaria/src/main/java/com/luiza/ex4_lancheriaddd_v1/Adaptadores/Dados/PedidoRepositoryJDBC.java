@@ -167,4 +167,15 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         // Ele é perfeitamente alinhado com o estilo do professor, sendo apenas mais específico para este caso.
         return jdbcTemplate.queryForObject(sql, Integer.class, CPF, dataLimite);
     }
+
+    @Override
+    public double totalGastoUltimosDias(String CPF, int dias) {
+        String sql = "SELECT COALESCE(SUM(valor), 0) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
+        LocalDate dataLimite = LocalDate.now().minusDays(dias);
+
+        // queryForObject retorna o total somado (ou 0 se não houver registros)
+        Double total = jdbcTemplate.queryForObject(sql, Double.class, CPF, dataLimite);
+
+        return total != null ? total : 0.0;
+    }
 }
