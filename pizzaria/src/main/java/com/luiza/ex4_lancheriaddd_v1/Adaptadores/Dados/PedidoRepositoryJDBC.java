@@ -60,7 +60,12 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         }, keyHolder);
 
         // pegamar o ID gerado do KeyHolder
-        long pedidoId = keyHolder.getKey().longValue();
+        Number generatedId = keyHolder.getKey();
+        if (generatedId == null) {
+            // Se o ID for nulo, lançamos um erro claro em vez de uma NullPointerException
+            throw new IllegalStateException("Falha ao salvar o pedido: O banco de dados não retornou o ID gerado.");
+        }
+        long pedidoId = generatedId.longValue();
 
         String sqlItemPedido = "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (?, ?, ?)";
         
@@ -171,7 +176,7 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         String sql = "SELECT COALESCE(SUM(valor), 0) FROM pedidos WHERE cliente_cpf = ? AND data_hora_pagamento >= ?";
         LocalDate dataLimite = LocalDate.now().minusDays(dias);
 
-        // queryForObject retorna o total somado (ou 0 se não houver registros)
+        // retorna o total somado ou 0
         Double total = jdbcTemplate.queryForObject(sql, Double.class, CPF, dataLimite);
 
         return total != null ? total : 0.0;
