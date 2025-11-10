@@ -1,7 +1,8 @@
 package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Seguranca;
 
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.UsuarioRepository;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Usuario;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,30 +12,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.UsuarioRepository;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Usuario;
 
 @Service
 public class AutenticacaoService implements UserDetailsService {
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    public AutenticacaoService(UsuarioRepository usuarioRepository){
+        this.usuarioRepository = usuarioRepository; 
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // O "username" no nosso sistema é o email
+        //"username" = email
         Usuario usuario = usuarioRepository.buscarPorEmail(email);
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
         }
 
-        // Converte o "tipo" (ex: "MASTER") em uma "Autoridade" que o Spring entende
-        // O Spring Security exige o prefixo "ROLE_"
+        // converte "tipo" ("MASTER") --> "autoridade"
         Collection<GrantedAuthority> authorities = Collections.singletonList(
             new SimpleGrantedAuthority("ROLE_" + usuario.getTipo().toUpperCase())
         );
 
-        // Cria e retorna um objeto User do Spring Security
         return new User(usuario.getEmail(), usuario.getSenha(), authorities);
     }
 }

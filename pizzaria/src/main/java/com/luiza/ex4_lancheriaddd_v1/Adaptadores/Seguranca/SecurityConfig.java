@@ -1,6 +1,6 @@
 package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Seguranca;
 
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.CustomUserDetailsService;
+import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Seguranca.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +16,12 @@ import org.springframework.security.config.Customizer;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    private AutenticacaoService autenticacaoService;
+    
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
+    public SecurityConfig (AutenticacaoService autenticacaoService){
+        this.autenticacaoService = autenticacaoService; 
+    }
     // 1. Define o "cofre" de senhas (BCrypt) 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -29,7 +31,7 @@ public class SecurityConfig {
     // 2. Ensina o Spring a autenticar usando nosso UserDetailsService e o BCrypt
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService)
+        auth.userDetailsService(autenticacaoService)
             .passwordEncoder(passwordEncoder());
     }
 
