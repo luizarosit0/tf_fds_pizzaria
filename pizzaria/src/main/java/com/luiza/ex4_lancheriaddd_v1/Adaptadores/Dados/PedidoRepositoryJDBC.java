@@ -1,7 +1,9 @@
 package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,11 +44,18 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
             PreparedStatement ps = connection.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pedido.getCliente().getCpf());
             ps.setString(2, pedido.getStatus().name());
-            ps.setObject(3, pedido.getDataHoraPagamento()); 
-            ps.setDouble(4, pedido.getValor());
-            ps.setDouble(5, pedido.getImpostos());
-            ps.setDouble(6, pedido.getDesconto());
-            ps.setDouble(7, pedido.getValorCobrado());
+            //ps.setObject(3, pedido.getDataHoraPagamento()); 
+
+            if (pedido.getDataHoraPagamento() != null) {
+                ps.setObject(3, pedido.getDataHoraPagamento());
+            } else {
+                ps.setNull(3, Types.TIMESTAMP); // Define um NULL do tipo TIMESTAMP
+            }
+
+            ps.setBigDecimal(4, BigDecimal.valueOf(pedido.getValor()));
+            ps.setBigDecimal(5, BigDecimal.valueOf(pedido.getImpostos()));
+            ps.setBigDecimal(6, BigDecimal.valueOf(pedido.getDesconto()));
+            ps.setBigDecimal(7, BigDecimal.valueOf(pedido.getValorCobrado()));
             return ps;
         }, keyHolder);
 
@@ -124,10 +133,10 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         jdbcTemplate.update(sql,
             pedido.getStatus().name(),
             pedido.getDataHoraPagamento(),
-            pedido.getValor(),
-            pedido.getImpostos(),
-            pedido.getDesconto(),
-            pedido.getValorCobrado(),
+            BigDecimal.valueOf(pedido.getValor()),
+            BigDecimal.valueOf(pedido.getImpostos()), 
+            BigDecimal.valueOf(pedido.getDesconto()), 
+            BigDecimal.valueOf(pedido.getValorCobrado()),
             pedido.getId()
         );
     }
