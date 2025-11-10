@@ -90,6 +90,6 @@ create table if not exists itens_pedido (
 -- Tabela de Usuários (para autenticação)
 create table if not exists usuarios (
     email varchar(100) primary key,
-    senha varchar(100) not null,
+    senha varchar(255) not null,
     tipo varchar(20) not null  -- (master ou cliente)
 );
