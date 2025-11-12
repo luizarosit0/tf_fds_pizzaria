@@ -10,9 +10,9 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 public class  DescontoClienteFrequenteService implements DescontoStrategyServiceI {
 
     private final PedidoRepository pedidoRepository;
-    private int minPedidos = 3;
-    private int diasFrequente = 20;
-    private double taxa = 0.07; // 7%
+    private final int minPedidos = 3;
+    private final int diasFrequente = 20;
+    private final double taxa = 0.07; // 7% 
 
     @Autowired
     public  DescontoClienteFrequenteService(PedidoRepository pedidoRepository) {

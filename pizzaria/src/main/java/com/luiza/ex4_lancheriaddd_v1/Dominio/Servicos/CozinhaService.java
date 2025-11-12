@@ -14,14 +14,14 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
 @Service
 public class CozinhaService {
-    private Queue<Pedido> filaEntrada;
+    private final Queue<Pedido> filaEntrada;
     private Pedido emPreparacao;
-    private Queue<Pedido> filaSaida;
+    private final Queue<Pedido> filaSaida;
 
-    private ScheduledExecutorService scheduler; // para simular o tempo de preparo
+    private final ScheduledExecutorService scheduler; // para simular o tempo de preparo
     
-    private PedidoRepository pedidoRepository;
-    private EntregaServiceI entregaService; 
+    private final PedidoRepository pedidoRepository;
+    private final EntregaServiceI entregaService;
 
     @Autowired
     public CozinhaService(PedidoRepository pedidoRepository, EntregaServiceI entregaService) {

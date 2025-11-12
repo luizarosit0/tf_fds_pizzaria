@@ -9,7 +9,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 
 @Component
 public class SolicitarStatusUC {
-    private  PedidoService pedidoService;
+    private final PedidoService pedidoService; 
 
     @Autowired
     public SolicitarStatusUC(PedidoService pedidoService) {
