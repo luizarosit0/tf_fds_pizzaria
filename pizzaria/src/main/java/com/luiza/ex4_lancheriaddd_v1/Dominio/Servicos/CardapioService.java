@@ -12,7 +12,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
 
 @Service
 public class CardapioService {
-    private CardapioRepository cardapioRepository;
+    private final CardapioRepository cardapioRepository;
 
     @Autowired
     public CardapioService(CardapioRepository cardapioRepository){

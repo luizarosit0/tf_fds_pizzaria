@@ -1,15 +1,20 @@
 package com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
+@Service
 public class DescontoClienteGastadorService implements DescontoStrategyServiceI {
 
-    private PedidoRepository pedidoRepository;
-    private double limite = 500.0;
-    private int dias = 30;
-    private double taxa = 0.15; // 15%
+    private final PedidoRepository pedidoRepository;
+    private final double limite = 500.0;
+    private final int dias = 30;
+    private final double taxa = 0.15; // 15% 
 
+    @Autowired
     public DescontoClienteGastadorService(PedidoRepository pedidoRepository) {
         this.pedidoRepository = pedidoRepository;
     }

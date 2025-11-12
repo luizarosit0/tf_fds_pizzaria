@@ -11,7 +11,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.UsuarioServiceI;
 @Component
 public class RegistrarUsuarioUC {
 
-    private UsuarioServiceI usuarioService;
+    private final UsuarioServiceI usuarioService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

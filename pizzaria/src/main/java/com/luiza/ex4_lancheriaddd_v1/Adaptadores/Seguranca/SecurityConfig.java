@@ -29,14 +29,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(autenticacaoService)
-            .passwordEncoder(passwordEncoder());
-    }
-    */
-
     // regras de acesso
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

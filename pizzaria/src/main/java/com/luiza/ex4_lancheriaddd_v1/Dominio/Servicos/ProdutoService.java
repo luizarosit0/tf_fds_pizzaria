@@ -10,7 +10,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
 
 @Service
 public class ProdutoService {
-    private ProdutosRepository produtosRepository;
+    private final ProdutosRepository produtosRepository;
 
     @Autowired
     public ProdutoService(ProdutosRepository produtosRepository){
