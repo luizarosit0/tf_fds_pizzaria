@@ -1,0 +1,44 @@
+# Enunciado:
+
+Uma pizzaria online utiliza um sistema de gestão de pedidos automatizados. O 
+cliente acessa o sistema usando um aplicativo no celular. Inicialmente o cliente 
+deve entrar no aplicativo. Se ainda não tiver cadastro deve se cadastrar. O cadastro 
+do cliente compreende nome, cpf, celular, endereço, email e senha de acesso. O 
+"usuário" será sempre o email.
+Depois de "entrar" no sistema, o cliente pode consultar o cardápio e montar seu 
+pedido. No cardápio o cliente visualiza a descrição de cada item e seu preço 
+unitário. Um pedido pode incluir quantos itens de cardápio desejar. Para cada item 
+deve indicar a quantidade desejada. No final do pedido o cliente deve informar 
+também o endereço de entrega.  
+Quando o pedido está completo o cliente submete o pedido para aprovação (neste 
+momento o status do pedido é marcado como "NOVO"). Para cada item o sistema 
+conhece a relação de ingredientes necessários. Então é feita uma verificação no 
+estoque para saber se existem ingredientes suficientes para atender a todos os 
+itens do pedido. Em caso negativo o pedido é retornado destacando os itens que 
+não podem ser atendidos. Automaticamente os itens de cardápio correspondentes 
+são marcados como indisponíveis (essa situação só se altera quando chegarem 
+mais ingredientes no estoque). Se tudo estiver ok o status do pedido é alterado para 
+"APROVADO" e o custo do pedido é calculado. Importante notar que os itens do 
+estoque são organizados nas porções necessárias para atender as receitas. 
+O cálculo do custo compreende somar o custo dos itens individuais, aplicar o 
+desconto - se for o caso - e calcular os impostos. Atualmente a pizzaria paga um 
+imposto único de 10% sobre o valor do somatório do custo dos itens. Para clientes 
+que fizeram mais de 3 pedidos nos últimos 20 dias é fornecido um desconto de 7% 
+no custo de cada item. O custo final é calculado subtraindo-se o desconto do custo 
+dos itens, e somando-se o imposto ao resultado da subtração.  
+O pedido "APROVADO" é então retornado para o cliente efetuar o pagamento. Neste 
+momento o cliente pode cancelar o pedido ou efetuar o pagamento. Se o 
+pagamento for efetuado o pedido é encaminhado para a fila da cozinha com o 
+status "PAGO" (a partir deste momento não pode mais ser cancelado) e uma 
+mensagem com o número do pedido é informada ao cliente. Caso contrário o 
+pedido é abandonado.  
+Na cozinha, o pedido recebe o status "AGUARDANDO". Quando começa a ser 
+preparado o pedido passa para o status “PREPARAÇÃO”. Quando o pedido estiver 
+pronto o status passa para “PRONTO”. Neste momento é encaminhado para a fila 
+do setor de entregas.  
+No setor de entregas o pedido aguarda ser atribuído a um entregador. Quando um 
+entregador recebe o pedido este passa para o estado "TRANSPORTE" e, finalmente, 
+quando é entregue passa para o estado "ENTREGUE". Pedidos entregues são então 
+arquivados no sistema associados ao cliente. Durante todo o tempo, as mudanças 
+de status do pedido podem ser acompanhadas pelo aplicativo a partir do número 
+do pedido. 
