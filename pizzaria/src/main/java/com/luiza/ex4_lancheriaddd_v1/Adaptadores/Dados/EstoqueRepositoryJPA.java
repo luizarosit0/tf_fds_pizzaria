@@ -20,13 +20,13 @@ public class EstoqueRepositoryJPA implements EstoqueRepository {
     @Override
     public ItemEstoque findByIngrediente(Ingrediente ingrediente) {
         return jpaRepo.findByIngredienteId(ingrediente.getId())
-                      .map(ItemEstoqueBD::fromItemEstoqueBD) // Usa o método conversor
+                      .map(ItemEstoqueBD::fromItemEstoqueBD) // converte
                       .orElse(null); 
     }
 
     @Override
     public void save(ItemEstoque itemEstoque) {
-        ItemEstoqueBD itemBD = ItemEstoqueBD.toItemEstoqueBD(itemEstoque); // Converte Domínio -> BD
+        ItemEstoqueBD itemBD = ItemEstoqueBD.toItemEstoqueBD(itemEstoque); // converte
         jpaRepo.save(itemBD);
     }
 }

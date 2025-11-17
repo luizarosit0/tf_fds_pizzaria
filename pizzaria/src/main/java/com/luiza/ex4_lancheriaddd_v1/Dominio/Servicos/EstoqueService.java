@@ -1,6 +1,6 @@
 package com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos;
 
-import org.springframework.beans.factory.annotation.Autowired; // IMPORTAR
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.EstoqueRepository;
@@ -24,7 +24,7 @@ public class EstoqueService implements EstoqueServiceI {
 
         for (ItemPedido itemPedido : pedido.getItens()) {
 
-            int quantidadePedida = itemPedido.getQuantidade();
+            int quantPedida = itemPedido.getQuantidade();
 
             for (Ingrediente ingredienteDaReceita : itemPedido.getItem().getReceita().getIngredientes()) {
 
@@ -35,7 +35,7 @@ public class EstoqueService implements EstoqueServiceI {
                     return false; 
                 }
 
-                if (itemEmEstoque.getQuantidade() < quantidadePedida) {
+                if (itemEmEstoque.getQuantidade() < quantPedida) {
                     System.err.println("Estoque: Insuficiente para " + ingredienteDaReceita.getDescricao());
                     return false; 
                 }

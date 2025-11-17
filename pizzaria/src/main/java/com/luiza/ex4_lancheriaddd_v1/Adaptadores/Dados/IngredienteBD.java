@@ -13,15 +13,18 @@ public class IngredienteBD {
     private long id;
     private String descricao;
 
-    protected IngredienteBD() {} // Para o JPA
+    protected IngredienteBD() {} 
 
     public IngredienteBD(long id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
 
+    public long getId(){return id;}
+    public String getDescricao(){return descricao;}
+
     // converte de BD para Domínio
     public static Ingrediente fromIngredienteBD(IngredienteBD ingredienteBD) {
-        return new Ingrediente(ingredienteBD.id, ingredienteBD.descricao);
+        return new Ingrediente(ingredienteBD.getId(), ingredienteBD.getDescricao());
     }
 }
