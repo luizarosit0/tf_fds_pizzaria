@@ -9,6 +9,14 @@ spring:
       mode: always   # executa schema.sql no boot
     schema-locations: classpath:schema.sql
     data-locations: classpath:data.sql
+  jpa:
+    hibernate:
+      ddl-auto: create 
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true # rodar data.sql depois que o JPA criou as tabelas
   h2:
     console:
       enabled: true

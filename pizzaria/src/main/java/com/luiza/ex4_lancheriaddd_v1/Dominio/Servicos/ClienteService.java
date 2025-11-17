@@ -8,7 +8,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
 
 @Service
 public class ClienteService {
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
     @Autowired
     public ClienteService(ClienteRepository clienteRepository){

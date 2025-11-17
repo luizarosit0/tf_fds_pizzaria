@@ -11,8 +11,8 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemPedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.ClienteService;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.PedidoService;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.ProdutoService;
 
 @Component
@@ -20,9 +20,9 @@ public class SubmeterPedidoUC {
 
     public record ItemData(long produtoId, int quantidade) {}
 
-    private PedidoService pedidoService;
-    private ClienteService clienteService;
-    private ProdutoService produtoService; 
+    private final PedidoService pedidoService;
+    private final ClienteService clienteService;
+    private final ProdutoService produtoService; 
 
     @Autowired
     public SubmeterPedidoUC(PedidoService pedidoService, ClienteService clienteService, ProdutoService produtoService) {

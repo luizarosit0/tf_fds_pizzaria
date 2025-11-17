@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 //cálculo. 
 @Service
 public class ImpostoService implements ImpostoServiceI{
-    private double taxa = 0.10; // 10% em cima do somatorio dos preços
+    private final double taxa = 0.10; // 10% em cima do somatorio dos preços
 
     @Override
     public double calculaImposto(double valor) {

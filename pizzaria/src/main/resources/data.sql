@@ -67,7 +67,7 @@ INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (1,3);
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,1);
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,3);
 
--- Inserção de um pedido de exemplo (Aprovado, mas não pago)
+-- PDEDIDO 1: Aprovado, mas não pago
 -- Cliente: Huguinho Pato (cpf: '9001')
 -- Itens: 1x Pizza Calabresa (R$ 55,00) + 2x Pizza Margherita (R$ 40,00 cada = R$ 80,00)
 -- Valor total dos itens: R$ 135,00

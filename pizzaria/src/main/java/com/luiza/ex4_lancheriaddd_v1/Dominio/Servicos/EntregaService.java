@@ -19,11 +19,11 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido.Status;
 
 @Service
 public class EntregaService implements EntregaServiceI {
-    private Queue<Pedido> filaEntrada;
+    private final Queue<Pedido> filaEntrada;
     private Pedido emTransporte; // simula o entregador
     
-    private ScheduledExecutorService scheduler;
-    private PedidoRepository pedidoRepository;
+    private final ScheduledExecutorService scheduler;
+    private final PedidoRepository pedidoRepository;
 
     @Autowired
     public EntregaService(PedidoRepository pedidoRepository) {

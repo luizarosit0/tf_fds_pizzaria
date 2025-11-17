@@ -2,13 +2,15 @@
 package com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Ingrediente;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Receita;
+
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.IngredientesRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.ReceitasRepository;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Ingrediente;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Receita;
 
 @Repository
 public class ReceitasRepositoryJDBC implements ReceitasRepository {
@@ -38,5 +40,3 @@ public class ReceitasRepositoryJDBC implements ReceitasRepository {
     }
 
 }
-
-

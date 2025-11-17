@@ -14,12 +14,12 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido.Status;
 //calcular valores, recuperar histórico de pedidos etc
 @Service
 public class PedidoService{
-    private PedidoRepository pedidoRepository;
-    private EstoqueServiceI estoqueServiceI;
-    private ImpostoServiceI impostoServiceI;
-    private DescontoServiceI descontoServiceI;
-    private PagamentoServiceI pagamentoService;
-    private CozinhaService cozinhaService;
+    private final PedidoRepository pedidoRepository;
+    private final EstoqueServiceI estoqueServiceI;
+    private final ImpostoServiceI impostoServiceI;
+    private final DescontoServiceI descontoServiceI;
+    private final PagamentoServiceI pagamentoService;
+    private final CozinhaService cozinhaService;
 
     @Autowired 
     public PedidoService(PedidoRepository pedidoRepository,
@@ -121,4 +121,3 @@ public class PedidoService{
     }
 
 }
-
