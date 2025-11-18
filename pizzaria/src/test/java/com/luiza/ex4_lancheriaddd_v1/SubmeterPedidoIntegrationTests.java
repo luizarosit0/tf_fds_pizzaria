@@ -37,6 +37,20 @@ public class SubmeterPedidoIntegrationTests {
 
     @BeforeEach
     void setup() {
+        // 1. LIMPEZA TOTAL (Mantenha a limpeza completa para garantir o isolamento)
+        jdbcTemplate.update("DELETE FROM itens_pedido");
+        jdbcTemplate.update("DELETE FROM cardapio_produto");
+        jdbcTemplate.update("DELETE FROM produto_receita");
+        jdbcTemplate.update("DELETE FROM receita_ingrediente");
+        jdbcTemplate.update("DELETE FROM itensEstoque"); 
+        jdbcTemplate.update("DELETE FROM pedidos"); 
+        jdbcTemplate.update("DELETE FROM produtos");
+        jdbcTemplate.update("DELETE FROM clientes");
+        jdbcTemplate.update("DELETE FROM receitas");
+        jdbcTemplate.update("DELETE FROM ingredientes");
+        jdbcTemplate.update("DELETE FROM cardapios");
+        jdbcTemplate.update("DELETE FROM usuarios");
+
         // criar: Cliente + Ingrediente + Estoque + Receitas + Produto        
         jdbcTemplate.update("INSERT INTO clientes (cpf, nome, celular, endereco, email) VALUES (?, ?, ?, ?, ?)",
                 CPF_CLIENTE, "Cliente Integracao", "519999999", "Rua Teste", "integ@email.com");
@@ -44,10 +58,11 @@ public class SubmeterPedidoIntegrationTests {
         jdbcTemplate.update("INSERT INTO ingredientes (id, descricao) VALUES (?, ?)", ID_INGREDIENTE, "Farinha Mágica");
 
         jdbcTemplate.update("INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (?, ?, ?)", 
-                10L, 100, ID_INGREDIENTE);
+            10L, 10000, ID_INGREDIENTE);
 
         jdbcTemplate.update("INSERT INTO receitas (id, titulo) VALUES (?, ?)", ID_RECEITA, "Receita Mágica");
-        jdbcTemplate.update("INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (?, ?)", ID_RECEITA, ID_INGREDIENTE);
+        jdbcTemplate.update("INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (?, ?, ?)", 
+            ID_RECEITA, ID_INGREDIENTE, 1);
 
         jdbcTemplate.update("INSERT INTO produtos (id, descricao, preco) VALUES (?, ?, ?)", ID_PRODUTO, "Pizza Mágica", 6000);
         jdbcTemplate.update("INSERT INTO produto_receita (produto_id, receita_id) VALUES (?, ?)", ID_PRODUTO, ID_RECEITA);
