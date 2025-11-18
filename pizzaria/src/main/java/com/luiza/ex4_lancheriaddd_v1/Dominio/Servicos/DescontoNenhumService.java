@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
 @Service
-public class DescontoNenhumService implements DescontoStrategyServiceI {
+public class DescontoNenhumService implements DescontoStrategy {
 
     @Override
     public double calcular(Pedido pedido) {
