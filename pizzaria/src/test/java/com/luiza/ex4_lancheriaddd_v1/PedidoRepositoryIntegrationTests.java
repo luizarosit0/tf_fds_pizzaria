@@ -1,0 +1,107 @@
+package com.luiza.ex4_lancheriaddd_v1;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados.PedidoRepositoryJDBC;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemPedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Receita;
+
+// classe para testar a integração entre o repositorio e o banco H2 
+// @JdbcTest -> faz rollback depois -> banco limpo para o proximo teste
+@JdbcTest
+@Import(PedidoRepositoryJDBC.class) // implementação real 
+public class PedidoRepositoryIntegrationTests {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private PedidoRepositoryJDBC pedidoRepository;
+
+    private final String CPF_TESTE = "12345678900";
+
+    // Como JbdcTest apaga tudo, antes de cada um tem que ter o Cliente e o Produto
+    // SQL direto -> para isolar e não depender de outras 
+    @BeforeEach 
+    void setupBanco() {
+        jdbcTemplate.update("INSERT INTO clientes (cpf, nome, celular, endereco, email) VALUES (?, ?, ?, ?, ?)",
+            CPF_TESTE, "Cliente Teste", "99999999", "Rua Teste", "teste@email.com");
+        
+        jdbcTemplate.update("INSERT INTO produtos (id, descricao, preco) VALUES (?, ?, ?)",
+            1L, "Pizza Teste", 5000); 
+    }
+
+    // caso de teste 1
+    @Test
+    @DisplayName("Deve salvar um pedido e gerar um ID")
+    void salvaPedidoGerarId() {
+        // cria objeto Pedido em memória
+        Cliente cliente = new Cliente(CPF_TESTE, "Cliente Teste", "99", "Rua", "email");
+        Produto produto = new Produto(1L, "Pizza Teste", new Receita(0, "", null), 5000);
+        ItemPedido item = new ItemPedido(produto, 2); // 2 pizzas = R$ 100,00
+        
+        Pedido novoPedido = new Pedido(cliente, List.of(item));
+        novoPedido.setValor(100.00);
+        novoPedido.setImpostos(10.00);
+        novoPedido.setValorCobrado(110.00);
+
+        Pedido pedidoSalvo = pedidoRepository.salvar(novoPedido);
+
+        // verifica se salvou
+        assertNotNull(pedidoSalvo.getId(), "O ID não deveria ser nulo");
+        assertTrue(pedidoSalvo.getId() > 0, "O ID deve ser maior que 0");
+        
+        // consulta o banco para ver se gravou mesmo
+        Integer count = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM pedidos WHERE id = ?", Integer.class, pedidoSalvo.getId());
+        assertEquals(1, count, "O pedido deve existir no banco de dados");
+    }
+
+    // caso de teste 2
+    @Test
+    @DisplayName("Deve contar pedidos recentes corretamente")
+    void contaPedidosRecentes() {
+        // insere 4 pedidos manualmente no banco, com datas especificas
+        String sqlInsert = "INSERT INTO pedidos (cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) VALUES (?, 'PAGO', ?, 100, 10, 0, 110)";
+        
+        jdbcTemplate.update(sqlInsert, CPF_TESTE, LocalDateTime.now().minusDays(1)); // Ontem
+        jdbcTemplate.update(sqlInsert, CPF_TESTE, LocalDateTime.now().minusDays(5)); // 5 dias atras
+        jdbcTemplate.update(sqlInsert, CPF_TESTE, LocalDateTime.now().minusDays(10)); // 10 dias atras
+        // inserir um pedido de mais de 20 dias, para garantir que não conta
+        jdbcTemplate.update(sqlInsert, CPF_TESTE, LocalDateTime.now().minusDays(30)); // 30 dias atras
+
+        int quantidade = pedidoRepository.quantPedidos(CPF_TESTE, 20);
+
+        assertEquals(3, quantidade, "Deve encontrar exatamente 3 pedidos nos últimos 20 dias");
+    }
+
+    // caso de teste 3
+    @Test
+    @DisplayName("Deve somar total gasto corretamente")
+    void somaTotalGasto() {
+        // Insere pedidos com valores diferentes
+        jdbcTemplate.update("INSERT INTO pedidos (cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) VALUES (?, 'PAGO', ?, 200.00, 20, 0, 220)", 
+            CPF_TESTE, LocalDateTime.now().minusDays(2)); // R$ 200,00 
+        jdbcTemplate.update("INSERT INTO pedidos (cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) VALUES (?, 'PAGO', ?, 350.50, 35, 0, 385)", 
+            CPF_TESTE, LocalDateTime.now().minusDays(5)); // R$ 350,50
+
+        double total = pedidoRepository.totalGastoUltimosDias(CPF_TESTE, 30);
+
+        assertEquals(550.50, total, 0.01, "O total deve ser a soma dos valores base (200 + 350.50)");
+    }
+}
