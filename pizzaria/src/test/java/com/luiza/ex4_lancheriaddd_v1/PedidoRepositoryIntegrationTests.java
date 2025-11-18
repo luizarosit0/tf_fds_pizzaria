@@ -21,19 +21,22 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Receita;
 
-// classe para testar a integração entre o repositorio e o banco H2 
+// Testar a integração entre o repositorio e o banco H2 
 // @JdbcTest -> faz rollback depois -> banco limpo para o proximo teste
 @JdbcTest
 @Import(PedidoRepositoryJDBC.class) // implementação real 
 public class PedidoRepositoryIntegrationTests {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
     private PedidoRepositoryJDBC pedidoRepository;
 
     private final String CPF_TESTE = "12345678900";
+
+    @Autowired
+    public PedidoRepositoryIntegrationTests(JdbcTemplate jdbcTemplate, PedidoRepositoryJDBC pedidoRepository){
+        this.jdbcTemplate = jdbcTemplate;
+        this.pedidoRepository = pedidoRepository;
+    }
 
     // Como JbdcTest apaga tudo, antes de cada um tem que ter o Cliente e o Produto
     // SQL direto -> para isolar e não depender de outras 
@@ -46,7 +49,13 @@ public class PedidoRepositoryIntegrationTests {
             1L, "Pizza Teste", 5000); 
     }
 
-    // caso de teste 1
+    /*
+     * Caso de Teste 1: salvar pedido e recuperar ID
+     * Entradas: objeto Pedido em memória com valores fixos
+     * Estado inicial do banco: Cliente ('12345678900') e Produto (ID 1) inseridos no H2
+     * Resultados esperados: O objeto Pedido retornado deve ter um ID gerado (> 0 e not null) 
+     *                       Deve ter exatamente 1 registro na tabela pedidos com esse ID
+     */
     @Test
     @DisplayName("Deve salvar um pedido e gerar um ID")
     void salvaPedidoGerarId() {
@@ -72,7 +81,12 @@ public class PedidoRepositoryIntegrationTests {
         assertEquals(1, count, "O pedido deve existir no banco de dados");
     }
 
-    // caso de teste 2
+    /*
+     * Caso de Teste 2: Contagem de pedidos recentes
+     * Entradas: CPF de teste e período de 20 dias.
+     * Estado inicial do banco: 4 pedidos inseridos, sendo 3 nos últimos 10 dias (dentro do prazo de 20) e 1 há 30 dias (fora do prazo).
+     * Resultados esperados: Retorno da contagem deve ser 3.
+     */
     @Test
     @DisplayName("Deve contar pedidos recentes corretamente")
     void contaPedidosRecentes() {
@@ -90,7 +104,14 @@ public class PedidoRepositoryIntegrationTests {
         assertEquals(3, quantidade, "Deve encontrar exatamente 3 pedidos nos últimos 20 dias");
     }
 
-    // caso de teste 3
+    /*
+     * Caso de Teste 3: Somatória de gasto total
+     * Objetivo: Validar se a função de agregação SQL (SUM) retorna o valor total dos pedidos 
+*                pagos dentro dos últimos N dias para um dado CPF.
+     * Entradas: CPF de teste e período de 30 dias.
+     * Estado inicial do banco: 2 pedidos inseridos com valores 200.00 e 350.50.
+     * Resultados esperados: Retorno do total gasto deve ser 550.50 
+     */
     @Test
     @DisplayName("Deve somar total gasto corretamente")
     void somaTotalGasto() {
