@@ -2,12 +2,15 @@ package com.luiza.ex4_lancheriaddd_v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados.EstoqueRepositoryJPA;
 import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados.IngredienteBD;
@@ -22,12 +25,39 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemEstoque;
 public class EstoqueRepositoryIntegrationTests {
 
     private TestEntityManager entityManager; // para substuir o SQL puro -> cria obj e manda persistir
-    private EstoqueRepositoryJPA estoqueRepository; 
+    private EstoqueRepositoryJPA estoqueRepository;
+    private JdbcTemplate jdbcTemplate; // para usar o BeforeEach 
 
     @Autowired
-    public EstoqueRepositoryIntegrationTests(TestEntityManager entityManager, EstoqueRepositoryJPA estoqueRepository){
+    public EstoqueRepositoryIntegrationTests(TestEntityManager entityManager, 
+                                             EstoqueRepositoryJPA estoqueRepository, 
+                                             JdbcTemplate jdbcTemplate ){
         this.entityManager = entityManager;
         this.estoqueRepository = estoqueRepository;
+        this.jdbcTemplate = jdbcTemplate; 
+    }
+
+    @BeforeEach
+    void setup() {
+        // Limpeza dos filhos antes dos pais para evitar violação de Foreign Key
+        
+        // 1. Filhos de Ingredientes e Produtos
+        jdbcTemplate.update("DELETE FROM itens_pedido");
+        jdbcTemplate.update("DELETE FROM cardapio_produto");
+        jdbcTemplate.update("DELETE FROM produto_receita");
+        jdbcTemplate.update("DELETE FROM receita_ingrediente");
+        
+        // 2. Filhos de Ingredientes
+        jdbcTemplate.update("DELETE FROM itensEstoque"); 
+        
+        // 3. Pais (Ingredientes, Receitas, Produtos, Pedidos, etc.)
+        jdbcTemplate.update("DELETE FROM pedidos"); 
+        jdbcTemplate.update("DELETE FROM produtos");
+        jdbcTemplate.update("DELETE FROM clientes");
+        jdbcTemplate.update("DELETE FROM receitas");
+        jdbcTemplate.update("DELETE FROM ingredientes"); 
+        jdbcTemplate.update("DELETE FROM cardapios");
+        jdbcTemplate.update("DELETE FROM usuarios");
     }
 
     /*

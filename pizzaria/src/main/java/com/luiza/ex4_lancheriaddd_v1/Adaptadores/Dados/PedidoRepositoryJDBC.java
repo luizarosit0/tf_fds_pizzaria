@@ -67,6 +67,8 @@ public class PedidoRepositoryJDBC implements PedidoRepository {
         }
         long pedidoId = generatedId.longValue();
 
+        pedido.setId(pedidoId);
+
         String sqlItemPedido = "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (?, ?, ?)";
         
         for (ItemPedido item : pedido.getItens()) {

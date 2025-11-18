@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,10 +22,11 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Produto;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Receita;
 
+import jakarta.transaction.Transactional;
+
 // Testar a integração entre o repositorio e o banco H2 
-// @JdbcTest -> faz rollback depois -> banco limpo para o proximo teste
-@JdbcTest
-@Import(PedidoRepositoryJDBC.class) // implementação real 
+@SpringBootTest
+@Transactional 
 public class PedidoRepositoryIntegrationTests {
 
     private JdbcTemplate jdbcTemplate;
@@ -42,11 +44,38 @@ public class PedidoRepositoryIntegrationTests {
     // SQL direto -> para isolar e não depender de outras 
     @BeforeEach 
     void setupBanco() {
-        jdbcTemplate.update("INSERT INTO clientes (cpf, nome, celular, endereco, email) VALUES (?, ?, ?, ?, ?)",
-            CPF_TESTE, "Cliente Teste", "99999999", "Rua Teste", "teste@email.com");
-        
-        jdbcTemplate.update("INSERT INTO produtos (id, descricao, preco) VALUES (?, ?, ?)",
-            1L, "Pizza Teste", 5000); 
+        // 1. Limpeza rigorosa na ordem inversa das chaves estrangeiras
+    
+    // NÍVEL 3 (Netos) - Tabelas de relacionamento
+    jdbcTemplate.update("DELETE FROM itens_pedido");
+    jdbcTemplate.update("DELETE FROM cardapio_produto");
+    jdbcTemplate.update("DELETE FROM produto_receita");
+    jdbcTemplate.update("DELETE FROM receita_ingrediente");
+    
+    // NÍVEL 2 (Filhos) - Tabelas que dependem de Pais (INGREDIENTES)
+    // ESTA LINHA PRECISA VIR ANTES DE 'DELETE FROM ingredientes'
+    jdbcTemplate.update("DELETE FROM itensestoque"); // <-- A CORREÇÃO FINAL
+    
+    // NÍVEL 2 (Filhos) - Tabela de Pedidos (limpar e resetar o contador)
+    jdbcTemplate.update("DELETE FROM pedidos"); 
+    jdbcTemplate.update("ALTER TABLE pedidos ALTER COLUMN id RESTART WITH 1"); // Garante ID=1 para o teste
+    
+    // NÍVEL 1 (Pais) - Tabelas Pais
+    jdbcTemplate.update("DELETE FROM produtos");
+    jdbcTemplate.update("DELETE FROM clientes");
+    jdbcTemplate.update("DELETE FROM receitas");
+    jdbcTemplate.update("DELETE FROM ingredientes"); // Agora deve funcionar
+    jdbcTemplate.update("DELETE FROM cardapios"); 
+    jdbcTemplate.update("DELETE FROM usuarios");
+    
+    // 2. Inserir os dados fixos necessários para este teste
+    String CPF_TESTE = "12345678900"; 
+    jdbcTemplate.update("INSERT INTO clientes (cpf, nome, celular, endereco, email) VALUES (?, ?, ?, ?, ?)",
+        CPF_TESTE, "Cliente Teste", "99999999", "Rua Teste", "teste@email.com");
+    
+    // Inserir um produto para o teste (ID 99)
+    jdbcTemplate.update("INSERT INTO produtos (id, descricao, preco) VALUES (?, ?, ?)",
+        99L, "Pizza Teste", 5000); 
     }
 
     /*
@@ -61,7 +90,7 @@ public class PedidoRepositoryIntegrationTests {
     void salvaPedidoGerarId() {
         // cria objeto Pedido em memória
         Cliente cliente = new Cliente(CPF_TESTE, "Cliente Teste", "99", "Rua", "email");
-        Produto produto = new Produto(1L, "Pizza Teste", new Receita(0, "", null), 5000);
+        Produto produto = new Produto(99L, "Pizza Teste", new Receita(0, "", null), 5000);
         ItemPedido item = new ItemPedido(produto, 2); // 2 pizzas = R$ 100,00
         
         Pedido novoPedido = new Pedido(cliente, List.of(item));

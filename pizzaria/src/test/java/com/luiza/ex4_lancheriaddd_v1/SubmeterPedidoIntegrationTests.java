@@ -17,7 +17,7 @@ import com.luiza.ex4_lancheriaddd_v1.Aplicacao.SubmeterPedidoUC;
 import com.luiza.ex4_lancheriaddd_v1.Aplicacao.SubmeterPedidoUC.ItemData;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido.Status;
 
-@SpringBootTest // carrega tudo 
+@SpringBootTest // carrega tudo  
 @Transactional  // rollback depois de cada teste 
 public class SubmeterPedidoIntegrationTests {
 
