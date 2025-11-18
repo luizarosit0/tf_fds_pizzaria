@@ -30,20 +30,23 @@ INSERT INTO receitas (id, titulo) VALUES (2, 'Pizza queijo e presunto');
 INSERT INTO receitas (id, titulo) VALUES (3, 'Pizza margherita');
 
 -- Associação dos ingredientes à receita Pizza calabresa
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (1, 1); -- Disco de pizza
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (1, 6); -- Molho de tomate (200ml)
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (1, 3); -- Porcao de mussarela
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (1, 5); -- Porcao de calabresa
+-- Adicionado: quantidade_necessaria = 1
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (1, 1, 1); -- Disco de pizza
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (1, 6, 1); -- Molho de tomate (200ml)
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (1, 3, 1); -- Porcao de mussarela
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (1, 5, 1); -- Porcao de calabresa
 -- Associação dos ingredientes à receita Pizza queijo e presunto
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (2, 1); -- Disco de pizza
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (2, 6); -- Molho de tomate (200ml)
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (2, 3); -- Porcao de mussarela
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (2, 4); -- Porcao de presunto
+-- Adicionado: quantidade_necessaria = 1
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (2, 1, 1); -- Disco de pizza
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (2, 6, 1); -- Molho de tomate (200ml)
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (2, 3, 1); -- Porcao de mussarela
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (2, 4, 1); -- Porcao de presunto
 -- Associação dos ingredientes à receita Pizza margherita
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (3, 1); -- Disco de pizza
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (3, 6); -- Molho de tomate (200ml)
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (3, 3); -- Porcao de mussarela
-INSERT INTO receita_ingrediente (receita_id, ingrediente_id) VALUES (3, 8); -- Porcao de cebola
+-- Adicionado: quantidade_necessaria = 1
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (3, 1, 1); -- Disco de pizza
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (3, 6, 1); -- Molho de tomate (200ml)
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (3, 3, 1); -- Porcao de mussarela
+INSERT INTO receita_ingrediente (receita_id, ingrediente_id, quantidade_necessaria) VALUES (3, 8, 1); -- Porcao de cebola
 
 -- insercao dos produtos
 INSERT INTO produtos (id,descricao,preco) VALUES (1,'Pizza calabresa',5500);

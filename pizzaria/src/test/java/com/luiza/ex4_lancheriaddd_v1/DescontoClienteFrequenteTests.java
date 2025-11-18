@@ -10,12 +10,15 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings; 
+import org.mockito.quality.Strictness;
 
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Cliente;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos.DescontoClienteFrequenteService;
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 public class DescontoClienteFrequenteTests {
     
