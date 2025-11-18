@@ -14,6 +14,7 @@ public class ItemEstoqueBD {
 
     @Id
     private long id;
+    
     @OneToOne // relacionamento 1:1
     private IngredienteBD ingrediente;
     private int quantidade;
