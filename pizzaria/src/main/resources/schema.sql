@@ -28,6 +28,8 @@ create table if not exists receitas (
 create table if not exists receita_ingrediente (
   receita_id bigint not null,
   ingrediente_id bigint not null,
+  -- campo onde a quantidade de ingrediente por produto é armazenada
+  quantidade_necessaria int not null, 
   primary key (receita_id, ingrediente_id),
   foreign key (receita_id) references receitas(id),
   foreign key (ingrediente_id) references ingredientes(id)
