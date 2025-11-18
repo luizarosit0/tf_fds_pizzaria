@@ -7,7 +7,8 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.EstoqueRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Ingrediente;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemEstoque;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemPedido;
-import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.ItemReceita; // import da nova classe 
+import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido; 
 
 @Service
 public class EstoqueService implements EstoqueServiceI {
@@ -24,19 +25,28 @@ public class EstoqueService implements EstoqueServiceI {
 
         for (ItemPedido itemPedido : pedido.getItens()) {
 
-            int quantPedida = itemPedido.getQuantidade();
+            int quantPedida = itemPedido.getQuantidade(); // quantidade de pizzas 
 
-            for (Ingrediente ingredienteDaReceita : itemPedido.getItem().getReceita().getIngredientes()) {
+            // iterando sobre a composição da Receita -> lista de ItemReceita
+            for (ItemReceita itemDaReceita : itemPedido.getItem().getReceita().getComposicao()) { 
+                
+                int quantNecessariaPorUnidade = itemDaReceita.getQuantidadeNecessaria(); 
+                
+                // consumo TOTAL = quantidade necessária * quantidade de pizzas
+                int consumoTotal = quantNecessariaPorUnidade * quantPedida;
 
-                ItemEstoque itemEmEstoque = estoqueRepository.findByIngrediente(ingredienteDaReceita);
+                Ingrediente ingrediente = itemDaReceita.getIngrediente();
+
+                ItemEstoque itemEmEstoque = estoqueRepository.findByIngrediente(ingrediente);
 
                 if (itemEmEstoque == null) {
-                    System.err.println("Estoque: Ingrediente " + ingredienteDaReceita.getDescricao() + " não cadastrado.");
+                    System.err.println("Estoque: Ingrediente " + ingrediente.getDescricao() + " não cadastrado.");
                     return false; 
                 }
 
-                if (itemEmEstoque.getQuantidade() < quantPedida) {
-                    System.err.println("Estoque: Insuficiente para " + ingredienteDaReceita.getDescricao());
+                // compara estoque com o consumo total do ingrediente
+                if (itemEmEstoque.getQuantidade() < consumoTotal) {
+                    System.err.println("Estoque: Insuficiente para " + ingrediente.getDescricao());
                     return false; 
                 }
             }

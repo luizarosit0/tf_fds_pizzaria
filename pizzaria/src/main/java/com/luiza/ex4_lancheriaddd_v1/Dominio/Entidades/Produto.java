@@ -6,18 +6,32 @@ public class Produto {
     private Receita receita;
     private int preco;
 
+    // novo construtor impactado pela mudanca na receita 
     public Produto(long id,String descricao, Receita receita, int preco) {
         if (!Produto.precoValido(preco))
             throw new IllegalArgumentException("Preco invalido: " + preco);
         if (descricao == null || descricao.length() == 0)
             throw new IllegalArgumentException("Descricao invalida");
-        if (receita == null)
+        if (receita == null) 
             throw new IllegalArgumentException("Receita invalida");
         this.id = id;
         this.descricao = descricao;
         this.receita = receita;
         this.preco = preco;
     }
+
+    // public Produto(long id,String descricao, Receita receita, int preco) {
+    //     if (!Produto.precoValido(preco))
+    //         throw new IllegalArgumentException("Preco invalido: " + preco);
+    //     if (descricao == null || descricao.length() == 0)
+    //         throw new IllegalArgumentException("Descricao invalida");
+    //     if (receita == null)
+    //         throw new IllegalArgumentException("Receita invalida");
+    //     this.id = id;
+    //     this.descricao = descricao;
+    //     this.receita = receita;
+    //     this.preco = preco;
+    // }
 
     public long getId(){
         return id;
