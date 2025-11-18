@@ -7,7 +7,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
 @Service
-public class DescontoClienteGastadorService implements DescontoStrategyServiceI {
+public class DescontoClienteGastadorService implements DescontoStrategy {
 
     private final PedidoRepository pedidoRepository;
     private final double limite = 500.0;

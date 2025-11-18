@@ -7,7 +7,7 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Dados.PedidoRepository;
 import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.Pedido;
 
 @Service
-public class  DescontoClienteFrequenteService implements DescontoStrategyServiceI {
+public class  DescontoClienteFrequenteService implements DescontoStrategy {
 
     private final PedidoRepository pedidoRepository;
     private final int minPedidos = 3;

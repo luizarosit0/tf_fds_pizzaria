@@ -1,15 +1,20 @@
 package com.luiza.ex4_lancheriaddd_v1.Dominio.Servicos;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//projetados de maneira a facilitar a mudança frequente nas fórmulas de 
-//cálculo. 
 @Service
-public class ImpostoService implements ImpostoServiceI{
-    private final double taxa = 0.10; // 10% em cima do somatorio dos preços
+public class ImpostoService implements ImpostoServiceI {
+
+    private final ImpostoStrategy impostoStrategy;
+
+    @Autowired
+    public ImpostoService(ImpostoStrategy impostoStrategy) {
+        this.impostoStrategy = impostoStrategy;
+    }
 
     @Override
     public double calculaImposto(double valor) {
-        return valor * taxa; 
+        return impostoStrategy.calcular(valor);
     }
 }

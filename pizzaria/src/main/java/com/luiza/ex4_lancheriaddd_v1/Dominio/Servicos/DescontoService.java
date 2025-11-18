@@ -13,15 +13,15 @@ import com.luiza.ex4_lancheriaddd_v1.Dominio.Entidades.TipoDesconto;
 @Service
 public class DescontoService implements DescontoServiceI {
 
-    private final Map<TipoDesconto, DescontoStrategyServiceI> estrategias = new HashMap<>();
+    private final Map<TipoDesconto, DescontoStrategy> estrategias = new HashMap<>();
     private TipoDesconto tipoDescontoAtivo = TipoDesconto.CLIENTE_FREQUENTE;
 
     // lista de todas as classes que implementam DescontoStrategyServiceI
     @Autowired
-    public DescontoService(List<DescontoStrategyServiceI> listaDeEstrategias) {
+    public DescontoService(List<DescontoStrategy> listaDeEstrategias) {
 
         // registrar estratégias disponíveis
-        for (DescontoStrategyServiceI estrategia : listaDeEstrategias) {
+        for (DescontoStrategy estrategia : listaDeEstrategias) {
             if (estrategia instanceof DescontoClienteFrequenteService) {
                 estrategias.put(TipoDesconto.CLIENTE_FREQUENTE, estrategia);
             } else if (estrategia instanceof DescontoClienteGastadorService) {
@@ -32,6 +32,7 @@ public class DescontoService implements DescontoServiceI {
         }
     }
 
+    @Override
     public void definirTipoDescontoAtivo(TipoDesconto tipo) {
 
         this.tipoDescontoAtivo = tipo;
@@ -46,7 +47,7 @@ public class DescontoService implements DescontoServiceI {
     @Override
     public double calculaDesconto(Pedido pedido) {
 
-        DescontoStrategyServiceI estrategia = estrategias.getOrDefault(tipoDescontoAtivo, new DescontoNenhumService());
+        DescontoStrategy estrategia = estrategias.getOrDefault(tipoDescontoAtivo, new DescontoNenhumService());
         double desconto = estrategia.calcular(pedido);
 
         if (desconto > 0)
