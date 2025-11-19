@@ -10,9 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.luiza.ex4_lancheriaddd_v1.Adaptadores.Dados.PedidoRepositoryJDBC;
@@ -54,7 +52,7 @@ public class PedidoRepositoryIntegrationTests {
     
     // NÍVEL 2 (Filhos) - Tabelas que dependem de Pais (INGREDIENTES)
     // ESTA LINHA PRECISA VIR ANTES DE 'DELETE FROM ingredientes'
-    jdbcTemplate.update("DELETE FROM itensestoque"); // <-- A CORREÇÃO FINAL
+    jdbcTemplate.update("DELETE FROM itens_estoque"); // <-- A CORREÇÃO FINAL
     
     // NÍVEL 2 (Filhos) - Tabela de Pedidos (limpar e resetar o contador)
     jdbcTemplate.update("DELETE FROM pedidos"); 
