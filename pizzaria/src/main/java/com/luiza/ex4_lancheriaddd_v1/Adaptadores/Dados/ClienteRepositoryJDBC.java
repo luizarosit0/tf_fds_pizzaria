@@ -32,4 +32,20 @@ public class ClienteRepositoryJDBC implements ClienteRepository {
             return null;
         }
     }
+
+    @Override
+    public Cliente buscarPorEmail(String email) {
+        String sql = "SELECT * FROM clientes WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Cliente(
+                rs.getString("cpf"),
+                rs.getString("nome"),
+                rs.getString("celular"),
+                rs.getString("endereco"),
+                rs.getString("email")
+            ), email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }
