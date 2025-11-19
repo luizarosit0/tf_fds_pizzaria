@@ -9,7 +9,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "itensEstoque") 
+@Table(name = "itens_estoque") 
 public class ItemEstoqueBD {
 
     @Id

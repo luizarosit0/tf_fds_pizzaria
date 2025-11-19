@@ -115,9 +115,12 @@ public class PedidoService{
 
     // valor bruto = somatorio dos preços de todos os itens
     private double calculaBruto(Pedido pedido) {
-        return pedido.getItens().stream()
+        double totalEmCentavos = pedido.getItens().stream()
                 .mapToDouble(item -> item.getItem().getPreco() * item.getQuantidade())
                 .sum();
+        
+        // Centavos (int) -> Reais (double)
+        return totalEmCentavos / 100.0;
     }
 
 }

@@ -14,15 +14,15 @@ INSERT INTO ingredientes (id, descricao) VALUES (8, 'Porcao de oregano');
 INSERT INTO ingredientes (id, descricao) VALUES (9, 'Porcao de cebola');
 
 -- Inserção dos itens de estoque
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (1, 30, 1);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (2, 30, 2);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (3, 30, 3);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (4, 30, 4);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (5, 30, 5);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (6, 30, 6);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (7, 30, 7);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (8, 30, 8);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (9, 30, 9);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (1, 30, 1);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (2, 30, 2);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (3, 30, 3);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (4, 30, 4);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (5, 30, 5);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (6, 30, 6);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (7, 30, 7);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (8, 30, 8);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (9, 30, 9);
 
 -- Inserção das receitas 
 INSERT INTO receitas (id, titulo) VALUES (1, 'Pizza calabresa');
@@ -118,3 +118,6 @@ INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (5, 3, 3);
 -- senha codificada = senhamaster123
 INSERT INTO usuarios (email, senha, tipo) 
 VALUES ('master@pizzaria.com', '$2b$10$r.YShQoQrDK9BDJzkoCcjO5jYvn/9OcN1BHM3OHYifGNQde7nkIq6', 'MASTER');
+
+-- Ajusta o contador da tabela pedidos para o próximo ID ser 6
+ALTER TABLE pedidos ALTER COLUMN id RESTART WITH 6;
