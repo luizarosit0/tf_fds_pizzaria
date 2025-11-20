@@ -14,15 +14,15 @@ INSERT INTO ingredientes (id, descricao) VALUES (8, 'Porcao de oregano');
 INSERT INTO ingredientes (id, descricao) VALUES (9, 'Porcao de cebola');
 
 -- Inserção dos itens de estoque
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (1, 30, 1);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (2, 30, 2);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (3, 30, 3);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (4, 30, 4);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (5, 30, 5);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (6, 30, 6);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (7, 30, 7);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (8, 30, 8);
-INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (9, 30, 9);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (1, 30, 1);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (2, 30, 2);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (3, 30, 3);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (4, 30, 4);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (5, 30, 5);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (6, 30, 6);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (7, 30, 7);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (8, 30, 8);
+INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (9, 30, 9);
 
 -- Inserção das receitas 
 INSERT INTO receitas (id, titulo) VALUES (1, 'Pizza calabresa');
@@ -70,51 +70,77 @@ INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (1,3);
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,1);
 INSERT INTO cardapio_produto (cardapio_id,produto_id) VALUES (2,3);
 
--- PDEDIDO 1: Aprovado, mas não pago
+-- ===================== PEDIDOS ==================================
+-- Huguinho = cliente frequente 
+-- Luizinho = cliente gastador
+
+-- PDEDIDO 1: Aprovado
 -- Cliente: Huguinho Pato (cpf: '9001')
 -- Itens: 1x Pizza Calabresa (R$ 55,00) + 2x Pizza Margherita (R$ 40,00 cada = R$ 80,00)
--- Valor total dos itens: R$ 135,00
--- Impostos (10%): R$ 13,50
--- Desconto: R$ 0,00
--- Valor cobrado: R$ 148,50
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
     VALUES (1, '9001', 'APROVADO', NULL, 135.00, 13.50, 0.00, 148.50);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 1, 1); -- 1x Pizza calabresa
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (1, 3, 2); -- 2x Pizza margherita
 
--- PEDIDO 2: Pedido Cancelado (Testar UC4)
+-- PEDIDO 2: Pedido Cancelado
 -- Cliente: Luizinho Pato (cpf: '9002')
 -- Itens: 1x Pizza queijo e presunto (R$ 60,00)
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
     VALUES (2, '9002', 'CANCELADO', '2025-10-10 14:30:00', 60.00, 6.00, 0.00, 66.00);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (2, 2, 1);
 
--- PEDIDO 3: Pedido Entregue (Testar UC6 - Listar Entregues)
+-- PEDIDO 3: Pedido Entregue
 -- Cliente: Huguinho Pato (cpf: '9001')
 -- Itens: 1x Pizza margherita (R$ 40,00)
--- A data de pagamento/entrega deve ser do passado para ter resultados no relatório.
+-- Data de pagamento/entrega: 10/10/2025
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
     VALUES (3, '9001', 'ENTREGUE', '2025-10-10 14:30:00', 40.00, 4.00, 0.00, 44.00);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (3, 3, 1);
 
--- PEDIDO 4: Pedido para Teste de Pagar (UC5)
+-- PEDIDO 4: Aprovado
 -- Cliente: Luizinho Pato (cpf: '9002')
 -- Itens: 2x Pizza calabresa (R$ 55,00 cada = R$ 110,00)
--- Status inicial é APROVADO, pronto para ser pago.
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
     VALUES (4, '9002', 'APROVADO', '2025-10-12 14:30:00', 110.00, 11.00, 0.00, 121.00);
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (4, 1, 2);
 
--- PEDIDO 5: Pedido Entregue (Testar UC6 - Listar Entregues)
+-- PEDIDO 5: Pedido Entregue
 -- Cliente: Luizinho Pato (cpf: '9002')
 -- Itens: 3x Pizza margherita (R$ 40,00 cada = R$ 120,00)
--- A data de pagamento/entrega deve ser do passado para ter resultados no relatório.
+-- Data de pagamento/entrega: 14/10/2025
 INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
     VALUES (5, '9002', 'ENTREGUE', '2025-10-14 21:30:00', 120.00, 12.00, 0.00, 132.00);
--- CORRIGIDO: O item de pedido deve ter pedido_id=5 e a quantidade deve ser 3.
 INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (5, 3, 3);
+
+-- Pedido 6: Pedido Entregue
+-- Cliente: Luizinho Pato (cpf: '9002')
+-- Itens: 5x Pizza Margherita (R$ 40,00 cada = R$ 200,00)
+-- Data de pagamento/entrega: 01/10/2025
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (6, '9002', 'ENTREGUE', '2025-10-01 12:00:00', 200.00, 20.00, 0.00, 220.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (6, 3, 5);
+
+-- Pedido 7: Pedido Entregue 
+-- Cliente: Luizinho Pato (cpf: '9002')
+-- Itens: 2x Pizza Queijo (R$ 60,00) + 2x Pizza Margherita (R$ 40,00) = 120 + 80 = 200
+-- Data de pagamento/entrega: 05/10/2025
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (7, '9002', 'ENTREGUE', '2025-10-05 12:00:00', 200.00, 20.00, 0.00, 220.00);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (7, 2, 2);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (7, 3, 2);
+
+-- Pedido 8: Pedido Entregue
+-- Cliente: Huguinho Pato (cpf: '9001')
+-- Itens: 1x Pizza Calabresa (R$ 55,00)
+-- Data de pagamento/entrega: 18/10/2025
+INSERT INTO pedidos (id, cliente_cpf, status, data_hora_pagamento, valor, impostos, desconto, valor_cobrado) 
+    VALUES (8, '9001', 'ENTREGUE', '2025-10-18 12:00:00', 55.00, 5.50, 0.00, 60.50);
+INSERT INTO itens_pedido (pedido_id, produto_id, quantidade) VALUES (8, 1, 1);
 
 -- Usuario Master 
 -- senha codificada = senhamaster123
 INSERT INTO usuarios (email, senha, tipo) 
 VALUES ('master@pizzaria.com', '$2b$10$r.YShQoQrDK9BDJzkoCcjO5jYvn/9OcN1BHM3OHYifGNQde7nkIq6', 'MASTER');
+
+-- Ajusta o contador da tabela pedidos para o próximo ID ser 6
+ALTER TABLE pedidos ALTER COLUMN id RESTART WITH 9;

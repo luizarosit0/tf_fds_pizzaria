@@ -36,8 +36,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API é stateless
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/").permitAll() // publico
                 .requestMatchers("/cardapio/**").permitAll() // UC1 = público
                 .requestMatchers("/usuarios/registrar").permitAll() // endpoint para registrar
+                .requestMatchers("/pedidos/entregues").permitAll() // UC6 = publico
                 .requestMatchers("/pedidos/**").hasRole("CLIENTE") // UC2, UC3, UC4, UC5
                 .requestMatchers("/admin/**").hasRole("MASTER") // UC de admin
                 

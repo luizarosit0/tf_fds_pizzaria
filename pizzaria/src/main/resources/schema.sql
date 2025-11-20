@@ -11,7 +11,7 @@ create table if not exists ingredientes (
   descricao varchar(255) not null
 );
 
-create table if not exists itensEstoque(
+create table if not exists itens_estoque(
     id bigint primary key,
     quantidade int,
     ingrediente_id bigint,

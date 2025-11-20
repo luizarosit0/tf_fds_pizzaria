@@ -42,7 +42,7 @@ public class SubmeterPedidoIntegrationTests {
         jdbcTemplate.update("DELETE FROM cardapio_produto");
         jdbcTemplate.update("DELETE FROM produto_receita");
         jdbcTemplate.update("DELETE FROM receita_ingrediente");
-        jdbcTemplate.update("DELETE FROM itensEstoque"); 
+        jdbcTemplate.update("DELETE FROM itens_estoque"); 
         jdbcTemplate.update("DELETE FROM pedidos"); 
         jdbcTemplate.update("DELETE FROM produtos");
         jdbcTemplate.update("DELETE FROM clientes");
@@ -57,7 +57,7 @@ public class SubmeterPedidoIntegrationTests {
 
         jdbcTemplate.update("INSERT INTO ingredientes (id, descricao) VALUES (?, ?)", ID_INGREDIENTE, "Farinha Mágica");
 
-        jdbcTemplate.update("INSERT INTO itensEstoque (id, quantidade, ingrediente_id) VALUES (?, ?, ?)", 
+        jdbcTemplate.update("INSERT INTO itens_estoque (id, quantidade, ingrediente_id) VALUES (?, ?, ?)", 
             10L, 10000, ID_INGREDIENTE);
 
         jdbcTemplate.update("INSERT INTO receitas (id, titulo) VALUES (?, ?)", ID_RECEITA, "Receita Mágica");
@@ -110,7 +110,7 @@ public class SubmeterPedidoIntegrationTests {
     @DisplayName("Deve cancelar o pedido se não houver estoque suficiente")
     void cancelaSeSemEstoque() {
         // Atualiza o registro de estoque, que o setup criou, para 0 intens 
-        jdbcTemplate.update("UPDATE itensEstoque SET quantidade = ? WHERE ingrediente_id = ?", 
+        jdbcTemplate.update("UPDATE itens_estoque SET quantidade = ? WHERE ingrediente_id = ?", 
                             0, ID_INGREDIENTE); 
 
         List<ItemData> itens = List.of(new ItemData(ID_PRODUTO, 2)); 

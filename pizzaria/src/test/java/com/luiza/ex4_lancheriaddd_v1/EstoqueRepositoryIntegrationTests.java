@@ -2,7 +2,6 @@ package com.luiza.ex4_lancheriaddd_v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +47,7 @@ public class EstoqueRepositoryIntegrationTests {
         jdbcTemplate.update("DELETE FROM receita_ingrediente");
         
         // 2. Filhos de Ingredientes
-        jdbcTemplate.update("DELETE FROM itensEstoque"); 
+        jdbcTemplate.update("DELETE FROM itens_estoque"); 
         
         // 3. Pais (Ingredientes, Receitas, Produtos, Pedidos, etc.)
         jdbcTemplate.update("DELETE FROM pedidos"); 
